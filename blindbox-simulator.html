@@ -36,6 +36,13 @@
   color:var(--cream); text-shadow: 0 0 14px rgba(215,255,110,.55), 0 0 34px rgba(215,255,110,.25); margin:0; }
 .wd-tagline { font-size:13px; color:var(--muted); margin-top:2px; letter-spacing:.3px; }
 
+.wd-coin-badge { position:absolute; top:18px; right:18px; z-index:5; display:flex; align-items:center; gap:6px;
+  background:var(--card); border:1.5px solid var(--card-border); padding:5px 12px 5px 6px; border-radius:999px;
+  font-family:'Fredoka',sans-serif; font-weight:600; font-size:13.5px; color:var(--gold);
+  box-shadow:0 0 10px -2px rgba(255,216,107,.45); }
+.wd-coin-badge .wd-coin-icon { display:block; flex:0 0 auto; }
+.wd-coin-badge.low { color:var(--pink); }
+
 .wd-nav { display:flex; justify-content:center; gap:6px; margin:16px 0 18px; }
 .wd-nav button {
   font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; letter-spacing:.2px;
@@ -75,6 +82,17 @@
 @keyframes wdPop { to { transform:scale(0); opacity:0; } }
 
 .wd-hint { text-align:center; color:var(--muted); font-size:12.5px; margin-top:14px; line-height:1.5; }
+
+.wd-box-price { position:absolute; bottom:6px; right:6px; z-index:2; display:flex; align-items:center; gap:3px;
+  background:rgba(20,21,46,.6); color:#fff3c8; font-family:'Fredoka',sans-serif; font-weight:600; font-size:10.5px;
+  padding:2px 7px 2px 4px; border-radius:999px; }
+.wd-box-price .wd-coin-icon { display:block; flex:0 0 auto; }
+.wd-box.unaffordable { opacity:.5; }
+.wd-box.unaffordable:hover { transform:none; }
+
+.wd-funds-warn { text-align:center; color:var(--pink); font-weight:700; font-size:12.5px; margin-top:10px;
+  opacity:0; transition:opacity .25s ease; }
+.wd-funds-warn.show { opacity:1; }
 
 .wd-modal-bg { position:absolute; inset:0; background:rgba(10,10,26,.72); backdrop-filter:blur(2px);
   display:flex; align-items:center; justify-content:center; z-index:20; opacity:0; pointer-events:none; transition:opacity .25s ease; }
@@ -151,6 +169,7 @@
 
 <div class="wd-root" id="wdRoot">
   <div class="wd-stars" id="wdStars"></div>
+  <div class="wd-coin-badge" id="wdCoinBadge"></div>
   <div class="wd-wrap">
     <div class="wd-header">
       <p class="wd-logo">&#10024; Weirdos</p>
@@ -845,6 +864,18 @@
       '</svg>';
   }
 
+  // gold coin with a tiny sausage face pressed into the middle
+  function coinIconSVG(size){
+    size = size || 16;
+    return '<svg class="wd-coin-icon" width="'+size+'" height="'+size+'" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">' +
+      '<circle cx="16" cy="16" r="14.5" fill="#ffd86b" stroke="#c98f3a" stroke-width="1.6"/>' +
+      '<circle cx="16" cy="16" r="11" fill="none" stroke="#c98f3a" stroke-width="1.1" opacity="0.55"/>' +
+      '<rect x="9" y="12.5" width="14" height="8.5" rx="4.25" fill="#e8b56b" stroke="#a5713f" stroke-width="1"/>' +
+      '<circle cx="13" cy="16.5" r="1.1" fill="#2b2b45"/><circle cx="19" cy="16.5" r="1.1" fill="#2b2b45"/>' +
+      '<path d="M14 19 Q16 20.3 18 19" stroke="#2b2b45" stroke-width="1" fill="none" stroke-linecap="round"/>' +
+      '</svg>';
+  }
+
   // ---------- storage ----------
   // window.storage only exists inside the Claude.ai artifact environment.
   // When this file is opened directly (e.g. double-clicked in Chrome), it's
@@ -853,6 +884,16 @@
   // contexts block it). This keeps loading and reset working everywhere.
   var storageBackend = 'memory';
   var memoryStore = {};
+  var memoryCoins = null;
+
+  // ---------- gold coins ----------
+  // Coins pay to open boxes now; the same balance is meant to carry over
+  // into a future shop tab. Kept in their own storage slot so they can
+  // evolve independently of the figure inventory format.
+  var coins = 0;
+  var coinStorageKey = 'weirdos-coins-v1';
+  var STARTING_COINS = 500;
+  var BOX_COST = 25;
 
   function detectStorageBackend(){
     try {
@@ -914,6 +955,41 @@
     }
   }
 
+  function loadCoins(){
+    // storageBackend is already resolved by loadInventory() before this runs.
+    if (storageBackend === 'claude') {
+      return window.storage.get(coinStorageKey, false).then(function(res){
+        var raw = (res && res.value) ? JSON.parse(res.value) : null;
+        coins = (raw && typeof raw.coins === 'number') ? raw.coins : STARTING_COINS;
+      }).catch(function(){ coins = STARTING_COINS; });
+    }
+    if (storageBackend === 'local') {
+      try {
+        var raw = JSON.parse(localStorage.getItem(coinStorageKey) || 'null');
+        coins = (raw && typeof raw.coins === 'number') ? raw.coins : STARTING_COINS;
+      } catch (e) { coins = STARTING_COINS; }
+      return Promise.resolve();
+    }
+    coins = (typeof memoryCoins === 'number') ? memoryCoins : STARTING_COINS;
+    return Promise.resolve();
+  }
+
+  function saveCoins(){
+    try {
+      if (storageBackend === 'claude') {
+        return window.storage.set(coinStorageKey, JSON.stringify({coins:coins}), false).catch(function(){});
+      }
+      if (storageBackend === 'local') {
+        localStorage.setItem(coinStorageKey, JSON.stringify({coins:coins}));
+        return Promise.resolve();
+      }
+      memoryCoins = coins;
+      return Promise.resolve();
+    } catch (e) {
+      return Promise.resolve();
+    }
+  }
+
   // ---------- helpers ----------
   function ownedCount(id){ return inventory[id] || 0; }
   function seriesOwnedTotal(s){ return s.figures.filter(function(f){ return ownedCount(f.id) > 0; }).length; }
@@ -961,11 +1037,16 @@
     var html = seriesChipsHTML();
     html += '<div class="wd-panel-title">' + esc(s.name) + ' <small>tap a box to open it</small></div>';
     html += '<div class="wd-shelf" style="--sc:'+s.color+'">';
+    var afford = coins >= BOX_COST;
     for (var i=0;i<6;i++){
-      html += '<div class="wd-box" style="--sc:'+s.color+'"><div class="wd-box-ribbon"></div><div class="wd-box-mark">?</div></div>';
+      html += '<div class="wd-box'+(afford?'':' unaffordable')+'" style="--sc:'+s.color+'">' +
+        '<div class="wd-box-ribbon"></div><div class="wd-box-mark">?</div>' +
+        '<div class="wd-box-price">'+coinIconSVG(12)+BOX_COST+'</div>' +
+        '</div>';
     }
     html += '</div>';
     html += '<div class="wd-hint">5 regular Weirdos, 2 rares and 1 golden secret hide in every series.<br>Rares turn up about 1 box in 6, secrets about 1 in 20.</div>';
+    html += '<div class="wd-funds-warn" id="wdFundsWarn">Not enough gold coins for that box!</div>';
     return html;
   }
 
@@ -1042,8 +1123,43 @@
     bindDynamic();
   }
 
+  function renderCoinBadge(){
+    var el = document.getElementById('wdCoinBadge');
+    if (!el) return;
+    el.innerHTML = coinIconSVG(20) + '<span>' + coins.toLocaleString() + '</span>';
+    el.classList.toggle('low', coins < BOX_COST);
+  }
+
+  // dims/undims the boxes already on screen without a full re-render,
+  // so mid-animation boxes aren't disturbed when a purchase changes the balance
+  function updateBoxAffordability(){
+    var boxes = document.querySelectorAll('.wd-box');
+    var afford = coins >= BOX_COST;
+    for (var i=0;i<boxes.length;i++){
+      if (!boxes[i].classList.contains('opened')) boxes[i].classList.toggle('unaffordable', !afford);
+    }
+  }
+
+  var denyTimer = null;
+  function denyOpen(boxEl){
+    if (boxEl.classList.contains('shaking')) return;
+    boxEl.classList.add('shaking');
+    setTimeout(function(){ boxEl.classList.remove('shaking'); }, 500);
+    var warn = document.getElementById('wdFundsWarn');
+    if (warn) {
+      warn.classList.add('show');
+      clearTimeout(denyTimer);
+      denyTimer = setTimeout(function(){ warn.classList.remove('show'); }, 1800);
+    }
+  }
+
   function openBox(boxEl){
     if (boxEl.classList.contains('shaking') || boxEl.classList.contains('opened')) return;
+    if (coins < BOX_COST) { denyOpen(boxEl); return; }
+    coins -= BOX_COST;
+    try { saveCoins(); } catch (e) {}
+    renderCoinBadge();
+    updateBoxAffordability();
     boxEl.classList.add('shaking');
     setTimeout(function(){
       boxEl.classList.remove('shaking');
@@ -1107,9 +1223,12 @@
   });
 
   document.getElementById('wdReset').addEventListener('click', function(){
-    if (!confirm('Reset your whole collection? This cannot be undone.')) return;
+    if (!confirm('Reset your whole collection and gold coins? This cannot be undone.')) return;
     inventory = {};
+    coins = STARTING_COINS;
     try { saveInventory(); } catch (e) {}
+    try { saveCoins(); } catch (e) {}
+    renderCoinBadge();
     render();
   });
 
@@ -1125,9 +1244,10 @@
     starsWrap.appendChild(st);
   }
 
-  loadInventory().then(function(){
+  loadInventory().then(function(){ return loadCoins(); }).then(function(){
     document.getElementById('wdLoading').style.display = 'none';
     document.getElementById('wdMain').style.display = 'block';
+    renderCoinBadge();
     render();
   });
 })();
