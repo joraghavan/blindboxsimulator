@@ -1,0 +1,1134 @@
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap');
+
+.wd-root, .wd-root * { box-sizing: border-box; }
+.wd-root {
+  --bg-deep:#14152e;
+  --bg-mid:#1d1f42;
+  --glow:#d7ff6e;
+  --glow-soft:#eeffb8;
+  --pink:#ff93b3;
+  --gold:#ffd86b;
+  --cream:#f6f1e4;
+  --card:#252748;
+  --card-border:#3c3e72;
+  --muted:#8b8db8;
+  font-family:'Quicksand',sans-serif;
+  color:var(--cream);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, #2a2c5c 0%, transparent 60%),
+    radial-gradient(ellipse 100% 60% at 90% 110%, #2a1f4a 0%, transparent 55%),
+    var(--bg-deep);
+  border-radius:20px;
+  position:relative;
+  overflow:hidden;
+  min-height:640px;
+}
+
+.wd-stars { position:absolute; inset:0; pointer-events:none; z-index:0; }
+.wd-star { position:absolute; background:#fff; border-radius:50%; opacity:.5; animation:wdTwinkle 3s ease-in-out infinite; }
+@keyframes wdTwinkle { 0%,100%{opacity:.15;} 50%{opacity:.9;} }
+
+.wd-wrap { position:relative; z-index:1; padding:22px 20px 28px; max-width:660px; margin:0 auto; }
+
+.wd-header { text-align:center; margin-bottom:14px; }
+.wd-logo { font-family:'Fredoka',sans-serif; font-weight:700; font-size:30px; letter-spacing:.5px;
+  color:var(--cream); text-shadow: 0 0 14px rgba(215,255,110,.55), 0 0 34px rgba(215,255,110,.25); margin:0; }
+.wd-tagline { font-size:13px; color:var(--muted); margin-top:2px; letter-spacing:.3px; }
+
+.wd-nav { display:flex; justify-content:center; gap:6px; margin:16px 0 18px; }
+.wd-nav button {
+  font-family:'Quicksand',sans-serif; font-weight:700; font-size:13px; letter-spacing:.2px;
+  background:transparent; color:var(--muted); border:1px solid var(--card-border);
+  padding:8px 16px; border-radius:999px; cursor:pointer; transition:all .2s ease;
+}
+.wd-nav button:hover { color:var(--cream); border-color:var(--glow); }
+.wd-nav button.active { background:var(--glow); color:#14152e; border-color:var(--glow); box-shadow:0 0 16px rgba(215,255,110,.4); }
+
+.wd-series-row { display:flex; gap:8px; overflow-x:auto; padding:2px 2px 12px; margin-bottom:6px; scrollbar-width:thin; }
+.wd-series-chip {
+  flex:0 0 auto; display:flex; align-items:center; gap:6px; padding:7px 13px; border-radius:999px;
+  font-weight:700; font-size:12.5px; cursor:pointer; border:1.5px solid var(--card-border); background:var(--card);
+  color:var(--cream); opacity:.75; transition:all .2s ease; white-space:nowrap;
+}
+.wd-series-chip .dot { width:9px; height:9px; border-radius:50%; }
+.wd-series-chip.active { opacity:1; border-color:var(--sc,var(--glow)); box-shadow:0 0 14px var(--sc,var(--glow)); }
+
+.wd-panel-title { font-family:'Fredoka',sans-serif; font-size:17px; font-weight:600; margin:4px 0 12px; display:flex; align-items:center; justify-content:space-between; }
+.wd-panel-title small { font-family:'Quicksand',sans-serif; font-weight:600; color:var(--muted); font-size:12.5px; }
+
+.wd-shelf { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.wd-box { position:relative; aspect-ratio:1/1; border-radius:16px; cursor:pointer; user-select:none;
+  background:linear-gradient(155deg,var(--sc,var(--glow)) 0%, #17183a 130%);
+  border:2px solid rgba(255,255,255,.15); overflow:hidden;
+  display:flex; align-items:center; justify-content:center; transition:transform .15s ease;
+}
+.wd-box:hover { transform:translateY(-3px); }
+.wd-box:active { transform:translateY(0px) scale(.97); }
+.wd-box .wd-box-ribbon { position:absolute; inset:0; background:
+   linear-gradient(to right, transparent 44%, rgba(255,255,255,.35) 44%, rgba(255,255,255,.35) 56%, transparent 56%),
+   linear-gradient(to bottom, transparent 44%, rgba(255,255,255,.35) 44%, rgba(255,255,255,.35) 56%, transparent 56%); }
+.wd-box .wd-box-mark { font-family:'Fredoka',sans-serif; font-weight:700; font-size:26px; color:rgba(20,21,46,.55); z-index:1; }
+.wd-box.shaking { animation:wdShake .5s ease; }
+@keyframes wdShake { 0%,100%{transform:rotate(0);} 15%{transform:rotate(-6deg);} 30%{transform:rotate(6deg);} 45%{transform:rotate(-5deg);} 60%{transform:rotate(5deg);} 75%{transform:rotate(-3deg);} 90%{transform:rotate(3deg);} }
+.wd-box.opened { animation:wdPop .35s ease forwards; }
+@keyframes wdPop { to { transform:scale(0); opacity:0; } }
+
+.wd-hint { text-align:center; color:var(--muted); font-size:12.5px; margin-top:14px; line-height:1.5; }
+
+.wd-modal-bg { position:absolute; inset:0; background:rgba(10,10,26,.72); backdrop-filter:blur(2px);
+  display:flex; align-items:center; justify-content:center; z-index:20; opacity:0; pointer-events:none; transition:opacity .25s ease; }
+.wd-modal-bg.show { opacity:1; pointer-events:auto; }
+.wd-modal { background:var(--card); border:1.5px solid var(--card-border); border-radius:22px; padding:26px 24px 22px;
+  width:274px; text-align:center; position:relative; transform:scale(.85); transition:transform .3s cubic-bezier(.34,1.56,.64,1); }
+.wd-modal-bg.show .wd-modal { transform:scale(1); }
+
+.wd-burst { position:absolute; top:80px; left:50%; transform:translate(-50%,-50%); width:190px; height:190px; pointer-events:none; }
+.wd-ring { position:absolute; inset:0; border-radius:50%; border:2px solid var(--sc,var(--glow)); opacity:0; }
+.wd-modal-bg.show .wd-ring { animation:wdRing 1s ease-out forwards; }
+.wd-ring:nth-child(2){ animation-delay:.08s !important; }
+.wd-ring:nth-child(3){ animation-delay:.16s !important; }
+@keyframes wdRing { 0%{ opacity:.9; transform:scale(.2);} 100%{opacity:0; transform:scale(1.6);} }
+
+.wd-figure-stage { width:140px; height:172px; margin:2px auto 4px; position:relative; opacity:0; transform:scale(.5) translateY(10px); }
+.wd-modal-bg.show .wd-figure-stage { animation:wdFigureIn .5s .25s cubic-bezier(.34,1.56,.64,1) forwards; }
+@keyframes wdFigureIn { to { opacity:1; transform:scale(1) translateY(0);} }
+
+.wd-rarity-tag { display:inline-block; font-size:10.5px; font-weight:700; letter-spacing:.6px; text-transform:uppercase;
+  padding:3px 10px; border-radius:999px; margin-bottom:4px; }
+.wd-rarity-tag.common { background:rgba(215,255,110,.15); color:var(--glow); }
+.wd-rarity-tag.rare { background:rgba(255,147,179,.18); color:var(--pink); }
+.wd-rarity-tag.secret { background:linear-gradient(90deg,#ffd86b,#ffb56b); color:#3a2400; }
+
+.wd-fig-name { font-family:'Fredoka',sans-serif; font-size:18px; font-weight:600; margin:2px 0 1px; }
+.wd-fig-series { font-size:11.5px; color:var(--muted); margin-bottom:10px; }
+.wd-fig-status { font-size:12.5px; font-weight:700; margin-bottom:14px; }
+.wd-fig-status.new { color:var(--glow); }
+.wd-fig-status.dup { color:var(--pink); }
+
+.wd-btn { font-family:'Quicksand',sans-serif; font-weight:700; font-size:14px; background:var(--glow); color:#14152e;
+  border:none; padding:10px 26px; border-radius:999px; cursor:pointer; box-shadow:0 0 16px rgba(215,255,110,.35); }
+.wd-btn:hover { filter:brightness(1.06); }
+.wd-btn.ghost { background:transparent; color:var(--muted); border:1px solid var(--card-border); box-shadow:none; font-size:12px; padding:7px 16px; }
+
+.wd-progress-wrap { margin-bottom:14px; }
+.wd-progress-bar { height:9px; border-radius:999px; background:var(--bg-mid); overflow:hidden; border:1px solid var(--card-border); }
+.wd-progress-fill { height:100%; background:linear-gradient(90deg,var(--sc,var(--glow)),var(--glow-soft)); border-radius:999px; transition:width .4s ease; }
+.wd-progress-label { font-size:12px; color:var(--muted); margin-top:5px; display:flex; justify-content:space-between; }
+.wd-complete-badge { font-size:11.5px; font-weight:700; color:#3a2400; background:linear-gradient(90deg,#ffd86b,#ffb56b); padding:3px 10px; border-radius:999px; margin-left:8px; }
+
+.wd-coll-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.wd-slot { background:var(--card); border:1.5px solid var(--card-border); border-radius:16px; padding:8px 5px 8px; text-align:center; position:relative; }
+.wd-slot.owned { border-color:var(--sc,var(--glow)); box-shadow:0 0 14px -4px var(--sc,var(--glow)); }
+.wd-slot.rare.owned { border-color:var(--pink); box-shadow:0 0 15px -3px var(--pink); }
+.wd-slot.secret.owned { border-color:var(--gold); box-shadow:0 0 16px -2px var(--gold); }
+.wd-slot .wd-count { position:absolute; top:5px; right:6px; font-size:10px; font-weight:700; background:rgba(0,0,0,.4); color:var(--cream); padding:1px 5px; border-radius:999px; }
+.wd-slot .wd-pip { position:absolute; top:6px; left:7px; width:7px; height:7px; border-radius:50%; }
+.wd-slot .wd-pip.rare { background:var(--pink); }
+.wd-slot .wd-pip.secret { background:var(--gold); }
+.wd-slot .wd-thumb { width:58px; height:72px; margin:0 auto 3px; }
+.wd-slot .wd-slot-name { font-size:10px; font-weight:700; line-height:1.2; min-height:18px; display:flex; align-items:center; justify-content:center; }
+.wd-slot.locked .wd-slot-name { color:var(--muted); }
+
+.wd-stat-cards { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:18px; }
+.wd-stat-card { background:var(--card); border:1.5px solid var(--card-border); border-radius:14px; padding:12px 6px; text-align:center; }
+.wd-stat-num { font-family:'Fredoka',sans-serif; font-size:22px; font-weight:600; color:var(--glow); }
+.wd-stat-lbl { font-size:10.5px; color:var(--muted); margin-top:2px; }
+.wd-series-stat-row { display:flex; align-items:center; gap:10px; background:var(--card); border:1px solid var(--card-border); border-radius:12px; padding:9px 12px; margin-bottom:8px; }
+.wd-series-stat-row .dot { width:10px; height:10px; border-radius:50%; flex:0 0 auto; }
+.wd-series-stat-row .name { font-size:12.5px; font-weight:700; width:112px; flex:0 0 auto; }
+.wd-series-stat-row .wd-progress-bar { flex:1; }
+.wd-series-stat-row .pct { font-size:11px; color:var(--muted); width:34px; text-align:right; flex:0 0 auto; }
+
+.wd-shelf-box { background:var(--card); border:1.5px solid var(--card-border); border-radius:14px; padding:14px; margin-top:12px; }
+.wd-shelf-title { font-family:'Fredoka',sans-serif; font-size:14px; margin-bottom:4px; }
+.wd-shelf-sub { font-size:11px; color:var(--muted); margin-bottom:11px; }
+.wd-shelf-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:9px; }
+
+.wd-footer { text-align:center; margin-top:20px; }
+.wd-loading { text-align:center; padding:60px 0; color:var(--muted); font-size:13px; }
+</style>
+
+<div class="wd-root" id="wdRoot">
+  <div class="wd-stars" id="wdStars"></div>
+  <div class="wd-wrap">
+    <div class="wd-header">
+      <p class="wd-logo">&#10024; Weirdos</p>
+      <p class="wd-tagline">blind box collecting, after dark</p>
+    </div>
+    <div class="wd-nav" id="wdNav">
+      <button data-tab="open" class="active">Open Boxes</button>
+      <button data-tab="collection">My Collection</button>
+      <button data-tab="stats">Stats</button>
+    </div>
+    <div id="wdLoading" class="wd-loading">loading your collection...</div>
+    <div id="wdMain" style="display:none;"></div>
+    <div class="wd-footer">
+      <button class="wd-btn ghost" id="wdReset">Reset collection</button>
+    </div>
+  </div>
+
+  <div class="wd-modal-bg" id="wdModalBg">
+    <div class="wd-modal" id="wdModal"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+
+  // ---------- data ----------
+  // Every character is a sausage-shaped "Weirdo": a skin-toned pill body,
+  // a costume overlay on the lower body, a hat/ear treatment, small face
+  // marks, and a handful of extra accessories.
+
+  var SERIES = [
+    { id:'family', name:'Family Weirdos', color:'#ff93b3',
+      figures:[
+        {id:'fam1', name:'Papa Weirdo',    rarity:'common', pose:'stretch', skin:'#f0c093', suit:'#2e3a59', hat:'fedora', hatColor:'#1f2740', extras:['mustache','bowtie']},
+        {id:'fam2', name:'Mama Weirdo',    rarity:'common', pose:'wave',    skin:'#f6d3b0', suit:'#e0607a', hat:'bow', hatColor:'#ff93b3', extras:['lashes','apron']},
+        {id:'fam3', name:'Sis Weirdo',     rarity:'common', pose:'sit',     skin:'#f6d3b0', suit:'#ffd166', hat:'pigtails', hatColor:'#8a5a3a', extras:['freckles','overalls']},
+        {id:'fam4', name:'Bro Weirdo',     rarity:'common', pose:'peek',    skin:'#e8b58a', suit:'#5aa9e6', hat:'cap', hatColor:'#e0607a', extras:['hoodie']},
+        {id:'fam5', name:'Baby Weirdo',    rarity:'common', pose:'sleep',   skin:'#ffe0c2', suit:'#ffe9a8', hat:'curl', hatColor:'#8a5a3a', extras:['pacifier','bib']},
+        {id:'fam6', name:'Grandpa Weirdo', rarity:'rare',   pose:'hold',    skin:'#e0b48f', suit:'#7a6a58', hat:'bald', hatColor:'#e0b48f', extras:['glasses','mustache','cane']},
+        {id:'fam7', name:'Grandma Weirdo', rarity:'rare',   pose:'sit',     skin:'#f0c9a0', suit:'#9a6fa0', hat:'bun', hatColor:'#d9d9e0', extras:['glasses','shawl']},
+        {id:'fam8', name:'Golden Weirdo',  rarity:'secret', pose:'wave',    skin:'#ffe9b0', suit:'#ffd86b', hat:'tinycrown', hatColor:'#ffd86b', extras:['medal']}
+      ]},
+    { id:'animal', name:'Animal Weirdos', color:'#7fd8a4',
+      figures:[
+        {id:'ani1', name:'Panda Weirdo',   rarity:'common', pose:'sit',     skin:'#f2efe9', suit:'#f2efe9', fullSuit:true, hat:'ears-panda', hatColor:'#2f2f42', extras:['pandaPatches','bearTail']},
+        {id:'ani2', name:'Pig Weirdo',     rarity:'common', pose:'wave',    skin:'#f7c3d1', suit:'#f7b8c6', fullSuit:true, hat:'ears-pig', hatColor:'#f7b8c6', extras:['snoutPig','curlyTail']},
+        {id:'ani3', name:'Bunny Weirdo',   rarity:'common', pose:'peek',    skin:'#f6f0ff', suit:'#f3ecff', fullSuit:true, hat:'ears-bunny', hatColor:'#f3ecff', extras:['poofTail']},
+        {id:'ani4', name:'Kitty Weirdo',   rarity:'common', pose:'stretch', skin:'#f0c290', suit:'#eeae5f', fullSuit:true, hat:'ears-kitty', hatColor:'#eeae5f', extras:['whiskers','catTail','tabbyStripes']},
+        {id:'ani5', name:'Puppy Weirdo',   rarity:'common', pose:'hold',    skin:'#e3bf98', suit:'#c98f5c', fullSuit:true, hat:'ears-puppy', hatColor:'#a5713f', extras:['puppySpots','dogTail']},
+        {id:'ani6', name:'Tiger Weirdo',   rarity:'rare',   pose:'sit',     skin:'#ffcf94', suit:'#f3a44a', fullSuit:true, hat:'ears-tiger', hatColor:'#f3a44a', extras:['tigerStripes','catTail']},
+        {id:'ani7', name:'Unicorn Weirdo', rarity:'rare',   pose:'stretch', skin:'#faf3ff', suit:'#f7ecff', fullSuit:true, hat:'ears-unicorn', hatColor:'#f7ecff', extras:['rainbowMane','horn']},
+        {id:'ani8', name:'Dragon Weirdo',  rarity:'secret', pose:'wave',    skin:'#ffe9b0', suit:'#ffd86b', fullSuit:true, hat:'ears-dragon', hatColor:'#ffd86b', extras:['dragonWings','dragonTail']}
+      ]},
+    { id:'job', name:'Job Weirdos', color:'#7fc4e8',
+      figures:[
+        {id:'job1', name:'Chef Weirdo',       rarity:'common', pose:'hold',    skin:'#f0c093', suit:'#f4f1ea', hat:'chef', hatColor:'#ffffff', extras:['apronChef']},
+        {id:'job2', name:'Doctor Weirdo',     rarity:'common', pose:'sit',     skin:'#e8b58a', suit:'#eaf3fb', hat:'none', hatColor:'#eaf3fb', extras:['glasses','stethoscope']},
+        {id:'job3', name:'Astronaut Weirdo',  rarity:'common', pose:'peek',    skin:'#f6d3b0', suit:'#f0f0f5', hat:'helmet-astro', hatColor:'#cfe7ff', extras:['badge']},
+        {id:'job4', name:'Firefighter Weirdo',rarity:'common', pose:'wave',    skin:'#e0b48f', suit:'#f7d873', hat:'firehat', hatColor:'#e0607a', extras:['hose']},
+        {id:'job5', name:'Artist Weirdo',     rarity:'common', pose:'stretch', skin:'#f6d3b0', suit:'#f6ead2', hat:'beret', hatColor:'#e0607a', extras:['palette']},
+        {id:'job6', name:'Pirate Weirdo',     rarity:'rare',   pose:'sit',     skin:'#e0b48f', suit:'#2e3a59', hat:'tricorne', hatColor:'#1f2740', extras:['eyepatch','hook']},
+        {id:'job7', name:'Wizard Weirdo',     rarity:'rare',   pose:'hold',    skin:'#f0c9a0', suit:'#7a5ea6', hat:'wizardhat', hatColor:'#5f4785', extras:['wand','stars']},
+        {id:'job8', name:'Superhero Weirdo',  rarity:'secret', pose:'wave',    skin:'#ffe9b0', suit:'#ffd86b', hat:'mask-hero', hatColor:'#e0607a', extras:['cape','star']}
+      ]},
+    { id:'party', name:'Party Weirdos', color:'#ffb37f',
+      figures:[
+        {id:'par1', name:'Birthday Weirdo', rarity:'common', pose:'wave',    skin:'#f6d3b0', suit:'#f7d873', hat:'partyhat', hatColor:'#ff93b3', extras:['confetti']},
+        {id:'par2', name:'Ninja Weirdo',    rarity:'common', pose:'peek',    skin:'#e8b58a', suit:'#3d3d55', hat:'ninja', hatColor:'#3d3d55', extras:[]},
+        {id:'par3', name:'Cowboy Weirdo',   rarity:'common', pose:'sit',     skin:'#e0b48f', suit:'#6f8fae', hat:'cowboyhat', hatColor:'#8a5a3a', extras:['bandana']},
+        {id:'par4', name:'Robot Weirdo',    rarity:'common', pose:'stretch', skin:'#c7cde0', suit:'#aab4c9', hat:'antenna', hatColor:'#e0607a', extras:['visor','panels']},
+        {id:'par5', name:'Ballerina Weirdo',rarity:'common', pose:'hold',    skin:'#f6d3b0', suit:'#f7b6cf', hat:'bunbow', hatColor:'#e0607a', extras:['tutu']},
+        {id:'par6', name:'Vampire Weirdo',  rarity:'rare',   pose:'sit',     skin:'#efd6e6', suit:'#3d3d55', hat:'widowpeak', hatColor:'#1f1f2e', extras:['cape','fangs']},
+        {id:'par7', name:'Mermaid Weirdo',  rarity:'rare',   pose:'wave',    skin:'#f6d3b0', suit:'#4fb3a6', hat:'shellclip', hatColor:'#ff93b3', extras:['shellTop','fin']},
+        {id:'par8', name:'Royal Weirdo',    rarity:'secret', pose:'wave',    skin:'#ffe9b0', suit:'#ffd86b', hat:'crown', hatColor:'#ffd86b', extras:['cape','gem']}
+      ]},
+    { id:'global', name:'Global Weirdos', color:'#5ec8c0',
+      figures:[
+        {id:'glo1', name:'Tower Weirdo',      rarity:'common', pose:'stretch', skin:'#f0c093', suit:'#8a97a8', hat:'tower', hatColor:'#6b7686', extras:['scarfStripe']},
+        {id:'glo2', name:'Pyramid Weirdo',    rarity:'common', pose:'sit',     skin:'#e8b58a', suit:'#e0b878', hat:'pyramid', hatColor:'#d9a85c', extras:['sunGlow']},
+        {id:'glo3', name:'Clocktower Weirdo', rarity:'common', pose:'peek',    skin:'#f6d3b0', suit:'#8a97a8', hat:'clocktower', hatColor:'#6b7686', extras:['umbrella']},
+        {id:'glo4', name:'Torch Weirdo',      rarity:'common', pose:'wave',    skin:'#e0b48f', suit:'#7fb89a', hat:'torch-crown', hatColor:'#7fb89a', extras:['torchFlame']},
+        {id:'glo5', name:'Lantern Weirdo',    rarity:'common', pose:'hold',    skin:'#f0c9a0', suit:'#c9435a', hat:'lantern', hatColor:'#f2b84c', extras:['lanternGlow']},
+        {id:'glo6', name:'Wave Weirdo',       rarity:'rare',   pose:'stretch', skin:'#f6d3b0', suit:'#eaf3fb', hat:'wave-shell', hatColor:'#eaf3fb', extras:['waveLines']},
+        {id:'glo7', name:'Bloom Weirdo',      rarity:'rare',   pose:'sit',     skin:'#f0c9a0', suit:'#f2efe9', hat:'bloom-dome', hatColor:'#f2efe9', extras:['bloomPetals']},
+        {id:'glo8', name:'Aurora Weirdo',     rarity:'secret', pose:'wave',    skin:'#ffe9b0', suit:'#ffd86b', hat:'aurora-ribbon', hatColor:'#ffd86b', extras:['auroraRibbons']}
+      ]},
+    { id:'bakery', name:'Bakery Weirdos', color:'#e0a458',
+      figures:[
+        {id:'bak1', name:'Donut Weirdo',     rarity:'common', pose:'sit',     skin:'#f0c093', suit:'#e8a869', hat:'donut', hatColor:'#e8a869', extras:['sprinkles']},
+        {id:'bak2', name:'Cupcake Weirdo',   rarity:'common', pose:'wave',    skin:'#f6d3b0', suit:'#f7d9c4', hat:'cupcake-swirl', hatColor:'#fff0e0', extras:['cherryTop']},
+        {id:'bak3', name:'Cookie Weirdo',    rarity:'common', pose:'peek',    skin:'#e8b58a', suit:'#c98f5c', hat:'cookie', hatColor:'#c98f5c', extras:['crumbs']},
+        {id:'bak4', name:'Scoop Weirdo',     rarity:'common', pose:'stretch', skin:'#f0c9a0', suit:'#f7b6cf', hat:'scoop-cone', hatColor:'#f7b6cf', extras:['dripGloss']},
+        {id:'bak5', name:'Macaron Weirdo',   rarity:'common', pose:'hold',    skin:'#f6d3b0', suit:'#c9a7e0', hat:'macaron', hatColor:'#c9a7e0', extras:[]},
+        {id:'bak6', name:'Candy Cane Weirdo',rarity:'rare',   pose:'sit',     skin:'#f6d3b0', suit:'#eaf3fb', hat:'candycane', hatColor:'#c9435a', extras:['stripesCandy']},
+        {id:'bak7', name:'Cake Weirdo',      rarity:'rare',   pose:'hold',    skin:'#f0c9a0', suit:'#f7d873', hat:'cake-slice', hatColor:'#fff6e6', extras:['candleFlame']},
+        {id:'bak8', name:'Sundae Weirdo',    rarity:'secret', pose:'wave',    skin:'#ffe9b0', suit:'#ffd86b', hat:'sundae-cherry', hatColor:'#ffd86b', extras:['goldCherry']}
+      ]},
+    { id:'popstar', name:'Pop Star Weirdos', color:'#c78cf0',
+      figures:[
+        {id:'pop1', name:'Mic Weirdo',       rarity:'common', pose:'wave',    skin:'#f0c093', suit:'#3d3d55', hat:'mic-hair', hatColor:'#2b2b45', extras:['micProp']},
+        {id:'pop2', name:'Diva Weirdo',      rarity:'common', pose:'sit',     skin:'#e8b58a', suit:'#e0607a', hat:'diva-hair', hatColor:'#2b2b45', extras:['sunglasses']},
+        {id:'pop3', name:'Beat Weirdo',      rarity:'common', pose:'peek',    skin:'#f6d3b0', suit:'#5aa9e6', hat:'headphones', hatColor:'#2b2b45', extras:[]},
+        {id:'pop4', name:'Spotlight Weirdo', rarity:'common', pose:'stretch', skin:'#f0c9a0', suit:'#ffd86b', hat:'star-spot', hatColor:'#ffd86b', extras:['spotlightBeam']},
+        {id:'pop5', name:'Vinyl Weirdo',     rarity:'common', pose:'hold',    skin:'#e0b48f', suit:'#3d3d55', hat:'vinyl-disc', hatColor:'#1f1f2e', extras:[]},
+        {id:'pop6', name:'Rockstar Weirdo',  rarity:'rare',   pose:'sit',     skin:'#f6d3b0', suit:'#2e3a59', hat:'mohawk', hatColor:'#e0607a', extras:['guitarProp']},
+        {id:'pop7', name:'Diamond Weirdo',   rarity:'rare',   pose:'wave',    skin:'#f0c9a0', suit:'#eaf3fb', hat:'tiara', hatColor:'#eaf3fb', extras:['diamondSparkle']},
+        {id:'pop8', name:'Superstar Weirdo', rarity:'secret', pose:'wave',    skin:'#ffe9b0', suit:'#ffd86b', hat:'superstar-crown', hatColor:'#ffd86b', extras:['confetti','cape']}
+      ]},
+    { id:'school', name:'School Weirdos', color:'#f2c94c',
+      figures:[
+        {id:'sch1', name:'Bookworm Weirdo',     rarity:'common', pose:'sit',     skin:'#f0c093', suit:'#5aa9e6', hat:'none', hatColor:'#5aa9e6', extras:['glasses','bookProp']},
+        {id:'sch2', name:'Backpack Weirdo',     rarity:'common', pose:'wave',    skin:'#e8b58a', suit:'#7fb89a', hat:'none', hatColor:'#7fb89a', extras:['backpackProp']},
+        {id:'sch3', name:'Crayon Weirdo',       rarity:'common', pose:'peek',    skin:'#f6d3b0', suit:'#e0607a', hat:'crayon-tip', hatColor:'#e0607a', extras:[]},
+        {id:'sch4', name:'Ruler Weirdo',        rarity:'common', pose:'stretch', skin:'#f0c9a0', suit:'#ffd166', hat:'pencil-topper', hatColor:'#f2c94c', extras:['rulerProp']},
+        {id:'sch5', name:'ABC Weirdo',          rarity:'common', pose:'hold',    skin:'#e0b48f', suit:'#7fc4e8', hat:'blocks', hatColor:'#e0607a', extras:['blockProp']},
+        {id:'sch6', name:'Scienceclass Weirdo', rarity:'rare',   pose:'sit',     skin:'#f6d3b0', suit:'#f4f1ea', hat:'goggles', hatColor:'#7fc4e8', extras:['flaskProp']},
+        {id:'sch7', name:'Bandleader Weirdo',   rarity:'rare',   pose:'wave',    skin:'#e0b48f', suit:'#2e3a59', hat:'bandhat', hatColor:'#c9435a', extras:['trumpetProp']},
+        {id:'sch8', name:'Valedictorian Weirdo',rarity:'secret', pose:'wave',    skin:'#ffe9b0', suit:'#ffd86b', hat:'gradcap', hatColor:'#2b2b45', extras:['diplomaProp']}
+      ]}
+  ];
+
+  var FIG_BY_ID = {};
+  SERIES.forEach(function(s){
+    s.figures.forEach(function(f){
+      var copy = {};
+      for (var k in f) { copy[k] = f[k]; }
+      copy.seriesId = s.id;
+      copy.seriesName = s.name;
+      copy.seriesColor = s.color;
+      FIG_BY_ID[f.id] = copy;
+    });
+  });
+
+  var TOTAL_FIGS = 0;
+  SERIES.forEach(function(s){ TOTAL_FIGS += s.figures.length; });
+
+  var inventory = {};
+  var activeTab = 'open';
+  var activeSeries = 'family';
+  var storageKey = 'weirdos-collection-v1';
+
+  function shade(hex, pct){
+    var n = parseInt(hex.slice(1),16);
+    var r=(n>>16)&255, g=(n>>8)&255, b=n&255;
+    r = Math.max(0, Math.min(255, Math.round(r + (pct<0? r*pct : (255-r)*pct))));
+    g = Math.max(0, Math.min(255, Math.round(g + (pct<0? g*pct : (255-g)*pct))));
+    b = Math.max(0, Math.min(255, Math.round(b + (pct<0? b*pct : (255-b)*pct))));
+    function h2(v){ var s = v.toString(16); return s.length===1 ? '0'+s : s; }
+    return '#' + h2(r) + h2(g) + h2(b);
+  }
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function has(fig, tag){ return (fig.extras || []).indexOf(tag) !== -1; }
+
+  // ---------- pose angles (reused for arms/legs) ----------
+  var POSE = {
+    sit:     { armL:-14, armR:30,  legL:6,   legR:-6  },
+    sleep:   { armL:70,  armR:-70, legL:14,  legR:-14, lie:true },
+    stretch: { armL:-150,armR:150, legL:4,   legR:-4  },
+    wave:    { armL:-20, armR:-140,legL:4,   legR:-4  },
+    peek:    { armL:14,  armR:-14, legL:10,  legR:-10, crouch:10 },
+    hold:    { armL:-34, armR:34,  legL:4,   legR:-4  }
+  };
+
+  // ---------- costume pieces ----------
+  function hatSVG(fig){
+    var h = fig.hat, hc = fig.hatColor, dark = shade(hc,-0.25), o = '';
+    if (h === 'fedora') {
+      o += '<ellipse cx="55" cy="30" rx="30" ry="7" fill="'+hc+'"/>';
+      o += '<path d="M33 30 Q33 8 55 8 Q77 8 77 30 Z" fill="'+hc+'"/>';
+      o += '<rect x="33" y="24" width="44" height="6" fill="'+dark+'"/>';
+    } else if (h === 'bow') {
+      o += '<path d="M40 16 L52 24 L40 32 Z" fill="'+hc+'"/><path d="M70 16 L58 24 L70 32 Z" fill="'+hc+'"/>';
+      o += '<circle cx="55" cy="24" r="5" fill="'+shade(hc,-0.2)+'"/>';
+    } else if (h === 'pigtails') {
+      o += '<ellipse cx="26" cy="34" rx="9" ry="13" fill="'+hc+'"/><ellipse cx="84" cy="34" rx="9" ry="13" fill="'+hc+'"/>';
+      o += '<ellipse cx="26" cy="20" rx="6" ry="5" fill="'+hc+'"/><ellipse cx="84" cy="20" rx="6" ry="5" fill="'+hc+'"/>';
+    } else if (h === 'cap') {
+      o += '<path d="M32 26 Q32 6 55 6 Q78 6 78 26 Z" fill="'+hc+'"/>';
+      o += '<ellipse cx="72" cy="27" rx="20" ry="6" fill="'+shade(hc,-0.15)+'"/>';
+    } else if (h === 'curl') {
+      o += '<path d="M52 12 Q46 2 58 4 Q62 10 52 12 Z" fill="'+hc+'"/>';
+    } else if (h === 'bald') {
+      o += '<ellipse cx="55" cy="28" rx="4" ry="2.5" fill="'+shade(fig.skin,0.3)+'" opacity="0.6"/>';
+    } else if (h === 'bun') {
+      o += '<circle cx="55" cy="14" r="10" fill="'+hc+'"/>';
+      o += '<path d="M35 30 Q30 12 55 14 Q80 12 75 30 Z" fill="'+hc+'"/>';
+    } else if (h === 'tinycrown') {
+      o += '<path d="M38 24 L42 8 L55 18 L68 8 L72 24 Z" fill="'+hc+'"/>';
+      o += '<circle cx="42" cy="8" r="2.6" fill="#fff3c8"/><circle cx="55" cy="18" r="0"/><circle cx="68" cy="8" r="2.6" fill="#fff3c8"/>';
+    } else if (h === 'chef') {
+      o += '<rect x="38" y="0" width="34" height="22" rx="8" fill="'+hc+'" stroke="#ddd6c8" stroke-width="1"/>';
+      o += '<ellipse cx="55" cy="22" rx="24" ry="7" fill="'+hc+'"/>';
+      o += '<circle cx="44" cy="4" r="8" fill="'+hc+'"/><circle cx="55" cy="0" r="9" fill="'+hc+'"/><circle cx="66" cy="4" r="8" fill="'+hc+'"/>';
+    } else if (h === 'helmet-astro') {
+      o += '<circle cx="55" cy="26" r="27" fill="'+hc+'" opacity="0.55"/>';
+      o += '<circle cx="55" cy="26" r="27" fill="none" stroke="#f0f0f5" stroke-width="3"/>';
+    } else if (h === 'firehat') {
+      o += '<path d="M30 28 Q30 6 55 6 Q80 6 80 28 Z" fill="'+hc+'"/>';
+      o += '<ellipse cx="55" cy="28" rx="28" ry="7" fill="'+shade(hc,-0.15)+'"/>';
+      o += '<circle cx="55" cy="14" r="6" fill="#ffd86b"/>';
+    } else if (h === 'beret') {
+      o += '<ellipse cx="52" cy="18" rx="22" ry="13" fill="'+hc+'"/>';
+      o += '<circle cx="70" cy="8" r="4" fill="'+hc+'"/>';
+    } else if (h === 'tricorne') {
+      o += '<path d="M26 26 Q40 4 55 14 Q70 4 84 26 Q55 18 26 26 Z" fill="'+hc+'"/>';
+      o += '<circle cx="55" cy="15" r="3" fill="#ffd86b"/>';
+    } else if (h === 'wizardhat') {
+      o += '<path d="M40 26 L55 -14 L70 26 Z" fill="'+hc+'"/>';
+      o += '<ellipse cx="55" cy="26" rx="24" ry="7" fill="'+shade(hc,-0.15)+'"/>';
+      o += '<circle cx="53" cy="6" r="2" fill="#ffd86b"/><circle cx="59" cy="-2" r="1.6" fill="#ffd86b"/>';
+    } else if (h === 'mask-hero') {
+      o += '<path d="M32 42 Q55 30 78 42 Q78 50 55 50 Q32 50 32 42 Z" fill="'+hc+'"/>';
+    } else if (h === 'partyhat') {
+      o += '<path d="M40 26 L55 -8 L70 26 Z" fill="'+hc+'"/>';
+      o += '<circle cx="55" cy="-10" r="5" fill="#ffd86b"/>';
+      o += '<circle cx="46" cy="12" r="2.4" fill="#fff3c8"/><circle cx="62" cy="18" r="2.4" fill="#fff3c8"/>';
+    } else if (h === 'ninja') {
+      o += '<rect x="30" y="18" width="50" height="10" fill="'+hc+'"/>';
+      o += '<path d="M80 20 L96 14 M80 26 L96 30" stroke="'+hc+'" stroke-width="4" stroke-linecap="round"/>';
+    } else if (h === 'cowboyhat') {
+      o += '<ellipse cx="55" cy="26" rx="32" ry="8" fill="'+hc+'"/>';
+      o += '<path d="M38 26 Q38 6 55 6 Q72 6 72 26 Z" fill="'+shade(hc,0.08)+'"/>';
+    } else if (h === 'antenna') {
+      o += '<line x1="55" y1="10" x2="55" y2="-6" stroke="'+shade(fig.suit,-0.2)+'" stroke-width="3"/>';
+      o += '<circle cx="55" cy="-8" r="4.5" fill="'+hc+'"/>';
+    } else if (h === 'bunbow') {
+      o += '<circle cx="55" cy="12" r="9" fill="'+shade(fig.skin,-0.15)+'"/>';
+      o += '<path d="M46 8 L55 12 L46 16 Z" fill="'+hc+'"/><path d="M64 8 L55 12 L64 16 Z" fill="'+hc+'"/>';
+    } else if (h === 'widowpeak') {
+      o += '<path d="M32 24 Q55 8 78 24 L78 20 Q55 30 32 20 Z" fill="'+hc+'"/>';
+    } else if (h === 'shellclip') {
+      o += '<path d="M40 18 Q46 8 52 18 Q46 24 40 18 Z" fill="'+hc+'"/>';
+    } else if (h === 'crown') {
+      o += '<path d="M32 26 L38 4 L55 18 L72 4 L78 26 Z" fill="'+hc+'"/>';
+      o += '<circle cx="38" cy="4" r="3" fill="#ff93b3"/><circle cx="55" cy="18" r="0"/><circle cx="72" cy="4" r="3" fill="#7fc4e8"/>';
+    } else if (h.indexOf('ears-') === 0) {
+      o += animalEars(h.replace('ears-',''), hc, fig);
+    } else if (h === 'tower') {
+      o += '<path d="M55 -14 L62 8 L48 8 Z" fill="'+hc+'"/><path d="M40 24 L70 24 L64 8 L46 8 Z" fill="'+hc+'"/>';
+      o += '<path d="M34 26 L76 26 L70 24 L40 24 Z" fill="'+dark+'"/>';
+      o += '<line x1="42" y1="10" x2="68" y2="18" stroke="'+dark+'" stroke-width="1.4"/><line x1="68" y1="10" x2="42" y2="18" stroke="'+dark+'" stroke-width="1.4"/>';
+    } else if (h === 'pyramid') {
+      o += '<path d="M30 26 L55 -6 L80 26 Z" fill="'+hc+'"/><path d="M30 26 L55 -6 L55 26 Z" fill="'+dark+'"/>';
+    } else if (h === 'clocktower') {
+      o += '<rect x="44" y="-8" width="22" height="30" fill="'+hc+'"/><path d="M40 -8 L55 -20 L70 -8 Z" fill="'+dark+'"/>';
+      o += '<circle cx="55" cy="4" r="7" fill="#fdfdff" stroke="'+dark+'" stroke-width="1.4"/>';
+      o += '<line x1="55" y1="4" x2="55" y2="0" stroke="#2b2b45" stroke-width="1.3"/><line x1="55" y1="4" x2="58" y2="6" stroke="#2b2b45" stroke-width="1.3"/>';
+    } else if (h === 'torch-crown') {
+      o += '<path d="M34 24 L40 6 L47 20 L55 2 L63 20 L70 6 L76 24 Z" fill="'+hc+'"/>';
+    } else if (h === 'lantern') {
+      o += '<ellipse cx="55" cy="10" rx="16" ry="18" fill="'+hc+'"/>';
+      o += '<line x1="45" y1="0" x2="45" y2="20" stroke="'+dark+'" stroke-width="1" opacity="0.6"/><line x1="55" y1="-6" x2="55" y2="26" stroke="'+dark+'" stroke-width="1" opacity="0.6"/><line x1="65" y1="0" x2="65" y2="20" stroke="'+dark+'" stroke-width="1" opacity="0.6"/>';
+      o += '<rect x="51" y="-10" width="8" height="4" fill="'+dark+'"/>';
+    } else if (h === 'wave-shell') {
+      o += '<path d="M30 26 Q34 0 44 22 Z" fill="'+hc+'" stroke="'+dark+'" stroke-width="1"/>';
+      o += '<path d="M42 26 Q48 -8 60 24 Z" fill="'+hc+'" stroke="'+dark+'" stroke-width="1"/>';
+      o += '<path d="M58 26 Q64 2 76 22 Z" fill="'+hc+'" stroke="'+dark+'" stroke-width="1"/>';
+    } else if (h === 'bloom-dome') {
+      o += '<path d="M32 24 Q32 0 55 0 Q78 0 78 24 Z" fill="'+hc+'"/><circle cx="55" cy="-4" r="4" fill="'+hc+'"/>';
+      o += '<circle cx="34" cy="10" r="3" fill="'+hc+'"/><circle cx="76" cy="10" r="3" fill="'+hc+'"/>';
+    } else if (h === 'aurora-ribbon') {
+      o += '<path d="M30 10 Q45 -10 55 6 Q65 -10 80 10" stroke="#7fd8a4" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85"/>';
+      o += '<path d="M32 18 Q45 0 55 14 Q65 0 78 18" stroke="#c78cf0" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85"/>';
+    } else if (h === 'donut') {
+      o += '<ellipse cx="55" cy="14" rx="22" ry="14" fill="'+hc+'"/><ellipse cx="55" cy="14" rx="8" ry="5" fill="#14152e"/>';
+      o += '<g fill="#fff"><circle cx="46" cy="8" r="1.6"/><circle cx="60" cy="6" r="1.6"/><circle cx="66" cy="16" r="1.6"/><circle cx="44" cy="18" r="1.6"/></g>';
+    } else if (h === 'cupcake-swirl') {
+      o += '<path d="M40 24 Q40 4 55 4 Q70 4 70 24 Z" fill="'+hc+'"/><circle cx="55" cy="0" r="5" fill="'+hc+'"/>';
+    } else if (h === 'cookie') {
+      o += '<circle cx="55" cy="14" r="18" fill="'+hc+'"/>';
+      o += '<g fill="#6b4226"><circle cx="48" cy="8" r="2"/><circle cx="62" cy="10" r="2"/><circle cx="55" cy="20" r="2"/></g>';
+    } else if (h === 'scoop-cone') {
+      o += '<path d="M42 14 L55 34 L68 14 Z" fill="#e8c39a"/><circle cx="55" cy="6" r="16" fill="'+hc+'"/>';
+    } else if (h === 'macaron') {
+      o += '<ellipse cx="55" cy="4" rx="20" ry="8" fill="'+hc+'"/><ellipse cx="55" cy="16" rx="20" ry="8" fill="'+hc+'"/><rect x="35" y="8" width="40" height="6" fill="#fff0e0"/>';
+    } else if (h === 'candycane') {
+      o += '<path d="M40 26 Q40 -6 60 -6 Q74 -6 74 8" stroke="'+hc+'" stroke-width="9" fill="none" stroke-linecap="round"/>';
+      o += '<path d="M40 26 Q40 -6 60 -6 Q74 -6 74 8" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="6 6"/>';
+    } else if (h === 'cake-slice') {
+      o += '<path d="M36 24 L74 24 L55 -4 Z" fill="'+hc+'"/><path d="M36 24 L74 24 L70 16 L40 16 Z" fill="#f7b6cf"/><circle cx="55" cy="-4" r="3" fill="#e0607a"/>';
+    } else if (h === 'sundae-cherry') {
+      o += '<path d="M40 26 L44 4 L66 4 L70 26 Z" fill="'+hc+'" opacity="0.9"/><circle cx="55" cy="-2" r="5" fill="#e0607a"/><path d="M55 -6 L57 -12" stroke="#3d6b3d" stroke-width="1.6"/>';
+    } else if (h === 'mic-hair') {
+      o += '<path d="M40 20 L44 4 L50 18 L55 2 L60 18 L66 4 L70 20 Z" fill="'+hc+'"/>';
+    } else if (h === 'diva-hair') {
+      o += '<path d="M32 22 Q30 2 55 4 Q80 2 78 22 Q68 8 55 10 Q42 8 32 22 Z" fill="'+hc+'"/>';
+    } else if (h === 'headphones') {
+      o += '<path d="M32 20 Q32 -4 55 -4 Q78 -4 78 20" stroke="'+hc+'" stroke-width="5" fill="none"/>';
+      o += '<circle cx="32" cy="24" r="8" fill="'+hc+'"/><circle cx="78" cy="24" r="8" fill="'+hc+'"/>';
+    } else if (h === 'star-spot') {
+      o += '<path d="M55 -8 l6 14 15 1 -11 10 3 15 -13 -8 -13 8 3 -15 -11 -10 15 -1 z" fill="'+hc+'"/>';
+    } else if (h === 'vinyl-disc') {
+      o += '<ellipse cx="55" cy="8" rx="20" ry="9" fill="'+hc+'"/><ellipse cx="55" cy="8" rx="6" ry="3" fill="'+shade(hc,0.3)+'"/>';
+    } else if (h === 'mohawk') {
+      o += '<path d="M50 -14 L60 -14 L58 20 L52 20 Z" fill="'+hc+'"/><path d="M52 -14 L58 -14 L56 4 L54 4 Z" fill="'+shade(hc,0.2)+'"/>';
+    } else if (h === 'tiara') {
+      o += '<path d="M34 20 Q34 4 55 8 Q76 4 76 20" fill="none" stroke="'+hc+'" stroke-width="4"/>';
+      o += '<circle cx="55" cy="4" r="4" fill="#fff3c8"/><circle cx="42" cy="10" r="2.4" fill="#fff3c8"/><circle cx="68" cy="10" r="2.4" fill="#fff3c8"/>';
+    } else if (h === 'superstar-crown') {
+      o += '<path d="M34 22 L40 4 L55 14 L70 4 L76 22 Z" fill="'+hc+'"/>';
+      o += '<path d="M55 4 l2 5 5 0.5 -4 3.5 1 5 -4 -3 -4 3 1 -5 -4 -3.5 5 -0.5 z" fill="#fff3c8"/>';
+    } else if (h === 'crayon-tip') {
+      o += '<path d="M42 26 L55 -8 L68 26 Z" fill="'+hc+'"/><rect x="42" y="20" width="26" height="10" fill="'+dark+'"/>';
+    } else if (h === 'pencil-topper') {
+      o += '<rect x="46" y="4" width="18" height="22" fill="'+hc+'"/><path d="M46 4 L55 -10 L64 4 Z" fill="#e8c39a"/><rect x="46" y="20" width="18" height="6" fill="#ffb6c9"/>';
+    } else if (h === 'blocks') {
+      o += '<rect x="40" y="4" width="14" height="14" rx="2" fill="'+hc+'"/><rect x="56" y="4" width="14" height="14" rx="2" fill="'+shade(hc,0.15)+'"/>';
+      o += '<text x="47" y="15" font-size="9" text-anchor="middle" fill="#fff" font-family="sans-serif" font-weight="700">A</text><text x="63" y="15" font-size="9" text-anchor="middle" fill="#fff" font-family="sans-serif" font-weight="700">B</text>';
+    } else if (h === 'goggles') {
+      o += '<path d="M28 14 L37 14 M73 14 L82 14" stroke="'+hc+'" stroke-width="3"/>';
+      o += '<circle cx="46" cy="14" r="9" fill="none" stroke="'+hc+'" stroke-width="3"/><circle cx="64" cy="14" r="9" fill="none" stroke="'+hc+'" stroke-width="3"/>';
+    } else if (h === 'bandhat') {
+      o += '<rect x="40" y="0" width="30" height="20" fill="'+hc+'"/><ellipse cx="55" cy="0" rx="15" ry="5" fill="'+shade(hc,0.1)+'"/>';
+      o += '<rect x="52" y="-18" width="6" height="20" fill="#e0607a"/><ellipse cx="55" cy="-18" rx="6" ry="4" fill="#fff"/>';
+    } else if (h === 'gradcap') {
+      o += '<rect x="34" y="12" width="42" height="6" fill="'+hc+'"/><path d="M20 15 L55 4 L90 15 L55 22 Z" fill="'+hc+'"/>';
+      o += '<line x1="55" y1="15" x2="70" y2="26" stroke="'+shade(hc,0.3)+'" stroke-width="1.6"/><circle cx="70" cy="27" r="2.6" fill="#ffd86b"/>';
+    }
+    return o;
+  }
+
+  function animalEars(kind, hc, fig){
+    var o = '', dark = shade(hc,-0.3);
+    if (kind === 'panda') {
+      o += '<circle cx="34" cy="18" r="12" fill="#2f2f42"/><circle cx="76" cy="18" r="12" fill="#2f2f42"/>';
+    } else if (kind === 'pig') {
+      o += '<ellipse cx="36" cy="16" rx="9" ry="11" fill="'+hc+'" transform="rotate(-18 36 16)"/>';
+      o += '<ellipse cx="74" cy="16" rx="9" ry="11" fill="'+hc+'" transform="rotate(18 74 16)"/>';
+      o += '<ellipse cx="36" cy="17" rx="4" ry="5.5" fill="#f091a8" transform="rotate(-18 36 17)"/>';
+      o += '<ellipse cx="74" cy="17" rx="4" ry="5.5" fill="#f091a8" transform="rotate(18 74 17)"/>';
+    } else if (kind === 'bunny') {
+      o += '<ellipse cx="44" cy="4" rx="7" ry="20" fill="'+hc+'" transform="rotate(-8 44 4)"/>';
+      o += '<ellipse cx="66" cy="4" rx="7" ry="20" fill="'+hc+'" transform="rotate(8 66 4)"/>';
+      o += '<ellipse cx="44" cy="4" rx="3" ry="14" fill="#ffd6e6" transform="rotate(-8 44 4)"/>';
+      o += '<ellipse cx="66" cy="4" rx="3" ry="14" fill="#ffd6e6" transform="rotate(8 66 4)"/>';
+    } else if (kind === 'kitty') {
+      o += '<path d="M28 26 L34 2 L52 20 Z" fill="'+hc+'"/><path d="M82 26 L76 2 L58 20 Z" fill="'+hc+'"/>';
+      o += '<path d="M33 20 L36 8 L46 18 Z" fill="#ffd6e6"/><path d="M77 20 L74 8 L64 18 Z" fill="#ffd6e6"/>';
+    } else if (kind === 'puppy') {
+      o += '<ellipse cx="26" cy="30" rx="10" ry="18" fill="'+shade(hc,-0.15)+'" transform="rotate(10 26 30)"/>';
+      o += '<ellipse cx="84" cy="30" rx="10" ry="18" fill="'+shade(hc,-0.15)+'" transform="rotate(-10 84 30)"/>';
+    } else if (kind === 'tiger') {
+      o += '<path d="M28 26 L34 2 L52 20 Z" fill="'+hc+'"/><path d="M82 26 L76 2 L58 20 Z" fill="'+hc+'"/>';
+      o += '<path d="M33 20 L36 8 L46 18 Z" fill="#fff3e0"/><path d="M77 20 L74 8 L64 18 Z" fill="#fff3e0"/>';
+      o += '<path d="M31 6 L34 14 M78 6 L76 14" stroke="#8a5a20" stroke-width="2.4" stroke-linecap="round"/>';
+    } else if (kind === 'unicorn') {
+      o += '<path d="M50 22 L55 -12 L62 22 Z" fill="#ffe9b0"/>';
+      o += '<path d="M52 8 L58 8 M53 -1 L57 -1" stroke="#f3a44a" stroke-width="1.6"/>';
+      o += '<ellipse cx="30" cy="20" rx="8" ry="12" fill="'+hc+'" transform="rotate(-14 30 20)"/>';
+      o += '<ellipse cx="80" cy="20" rx="8" ry="12" fill="'+hc+'" transform="rotate(14 80 20)"/>';
+    } else if (kind === 'dragon') {
+      o += '<path d="M50 20 L55 -10 L62 20 Z" fill="#ffe9b0"/>';
+      o += '<ellipse cx="30" cy="20" rx="8" ry="12" fill="'+hc+'" transform="rotate(-14 30 20)"/>';
+      o += '<ellipse cx="80" cy="20" rx="8" ry="12" fill="'+hc+'" transform="rotate(14 80 20)"/>';
+    }
+    return o;
+  }
+
+  function faceSVG(fig, cx1, cx2, cy){
+    var o = '', sleeping = fig.pose === 'sleep';
+    if (sleeping) {
+      o += '<path d="M'+(cx1-6)+' '+cy+' Q'+cx1+' '+(cy-6)+' '+(cx1+6)+' '+cy+'" stroke="#2b2b45" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+      o += '<path d="M'+(cx2-6)+' '+cy+' Q'+cx2+' '+(cy-6)+' '+(cx2+6)+' '+cy+'" stroke="#2b2b45" stroke-width="2.4" fill="none" stroke-linecap="round"/>';
+    } else {
+      o += '<circle cx="'+cx1+'" cy="'+cy+'" r="4.4" fill="#2b2b45"/><circle cx="'+cx2+'" cy="'+cy+'" r="4.4" fill="#2b2b45"/>';
+      o += '<circle cx="'+(cx1+1.6)+'" cy="'+(cy-1.8)+'" r="1.5" fill="#fff"/><circle cx="'+(cx2+1.6)+'" cy="'+(cy-1.8)+'" r="1.5" fill="#fff"/>';
+      if (has(fig,'lashes')) {
+        o += '<path d="M'+(cx1-4)+' '+(cy-4)+' L'+(cx1-7)+' '+(cy-7)+' M'+(cx1+4)+' '+(cy-4)+' L'+(cx1+7)+' '+(cy-7)+'" stroke="#2b2b45" stroke-width="1.3" stroke-linecap="round"/>';
+        o += '<path d="M'+(cx2-4)+' '+(cy-4)+' L'+(cx2-7)+' '+(cy-7)+' M'+(cx2+4)+' '+(cy-4)+' L'+(cx2+7)+' '+(cy-7)+'" stroke="#2b2b45" stroke-width="1.3" stroke-linecap="round"/>';
+      }
+    }
+    var my = cy + 14;
+    o += '<ellipse cx="'+(cx1-2)+'" cy="'+(my-2)+'" rx="5.5" ry="3.6" fill="#ff93b3" opacity="0.5"/>';
+    o += '<ellipse cx="'+(cx2+2)+'" cy="'+(my-2)+'" rx="5.5" ry="3.6" fill="#ff93b3" opacity="0.5"/>';
+    if (has(fig,'freckles')) {
+      o += '<g fill="'+shade(fig.skin,-0.35)+'" opacity="0.55">' +
+        '<circle cx="'+(cx1-8)+'" cy="'+(my-3)+'" r="1"/><circle cx="'+(cx1-4)+'" cy="'+(my-1)+'" r="1"/>' +
+        '<circle cx="'+(cx2+8)+'" cy="'+(my-3)+'" r="1"/><circle cx="'+(cx2+4)+'" cy="'+(my-1)+'" r="1"/></g>';
+    }
+    if (has(fig,'pacifier')) {
+      o += '<circle cx="55" cy="'+(my+2)+'" r="6" fill="#ff93b3"/><circle cx="55" cy="'+(my+2)+'" r="2.6" fill="#fff"/>';
+    } else if (has(fig,'whiskers')) {
+      o += '<g stroke="'+shade(fig.skin,-0.35)+'" stroke-width="1.3" stroke-linecap="round" opacity="0.8">' +
+        '<path d="M20 '+my+' L38 '+(my+2)+'"/><path d="M20 '+(my+6)+' L38 '+(my+6)+'"/>' +
+        '<path d="M90 '+my+' L72 '+(my+2)+'"/><path d="M90 '+(my+6)+' L72 '+(my+6)+'"/></g>';
+      o += '<path d="M50 '+(my+2)+' Q55 '+(my+7)+' 60 '+(my+2)+'" stroke="#2b2b45" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+    } else if (has(fig,'snoutPig')) {
+      o += '<ellipse cx="55" cy="'+(my+3)+'" rx="9" ry="6.5" fill="#f091a8"/>';
+      o += '<ellipse cx="52" cy="'+(my+3)+'" rx="1.6" ry="2.2" fill="#c9607e"/><ellipse cx="58" cy="'+(my+3)+'" rx="1.6" ry="2.2" fill="#c9607e"/>';
+    } else if (has(fig,'fangs')) {
+      o += '<path d="M48 '+my+' Q55 '+(my+6)+' 62 '+my+'" stroke="#2b2b45" stroke-width="1.8" fill="none" stroke-linecap="round"/>';
+      o += '<path d="M50 '+(my+1)+' L50 '+(my+6)+' L53 '+(my+1)+' Z" fill="#fff"/><path d="M60 '+(my+1)+' L60 '+(my+6)+' L57 '+(my+1)+' Z" fill="#fff"/>';
+    } else {
+      o += '<path d="M48 '+my+' Q55 '+(my+6)+' 62 '+my+'" stroke="#2b2b45" stroke-width="1.9" fill="none" stroke-linecap="round"/>';
+    }
+    if (has(fig,'mustache')) {
+      o += '<path d="M44 '+(my-2)+' Q55 '+(my+4)+' 66 '+(my-2)+' Q55 '+(my-1)+' 44 '+(my-2)+' Z" fill="'+shade(fig.skin,-0.5)+'"/>';
+    }
+    if (has(fig,'glasses')) {
+      o += '<circle cx="'+cx1+'" cy="'+cy+'" r="7" fill="none" stroke="#2b2b45" stroke-width="1.8"/>';
+      o += '<circle cx="'+cx2+'" cy="'+cy+'" r="7" fill="none" stroke="#2b2b45" stroke-width="1.8"/>';
+      o += '<line x1="'+(cx1+7)+'" y1="'+cy+'" x2="'+(cx2-7)+'" y2="'+cy+'" stroke="#2b2b45" stroke-width="1.8"/>';
+    }
+    if (has(fig,'sunglasses')) {
+      o += '<ellipse cx="'+cx1+'" cy="'+cy+'" rx="7.5" ry="6" fill="#2b2b45"/>';
+      o += '<ellipse cx="'+cx2+'" cy="'+cy+'" rx="7.5" ry="6" fill="#2b2b45"/>';
+      o += '<rect x="'+(cx1+7)+'" y="'+(cy-1)+'" width="'+(cx2-cx1-14)+'" height="2" fill="#2b2b45"/>';
+      o += '<ellipse cx="'+(cx1-2)+'" cy="'+(cy-2)+'" rx="2" ry="1.4" fill="#fff" opacity="0.6"/><ellipse cx="'+(cx2-2)+'" cy="'+(cy-2)+'" rx="2" ry="1.4" fill="#fff" opacity="0.6"/>';
+    }
+    if (has(fig,'eyepatch')) {
+      o += '<circle cx="'+cx2+'" cy="'+cy+'" r="7.5" fill="#2b2b45"/>';
+      o += '<line x1="'+cx2+'" y1="'+(cy-12)+'" x2="30" y2="'+(cy-4)+'" stroke="#2b2b45" stroke-width="2"/>';
+    }
+    return o;
+  }
+
+  function backExtras(fig, main, light){
+    var o = '';
+    if (has(fig,'dragonWings')) {
+      o += '<path d="M50 78 Q10 50 4 84 Q8 112 50 98 Z" fill="'+shade(main,0.15)+'" opacity="0.95"/>';
+      o += '<path d="M60 78 Q100 50 106 84 Q102 112 60 98 Z" fill="'+shade(main,0.15)+'" opacity="0.95"/>';
+    }
+    if (has(fig,'rainbowMane')) {
+      o += '<path d="M32 22 Q18 40 26 62 Q16 78 30 96" stroke="#ff93b3" stroke-width="6" fill="none" stroke-linecap="round"/>';
+      o += '<path d="M28 26 Q14 44 22 66 Q12 82 26 100" stroke="#ffd86b" stroke-width="6" fill="none" stroke-linecap="round"/>';
+      o += '<path d="M24 30 Q10 48 18 70" stroke="#7fd8a4" stroke-width="6" fill="none" stroke-linecap="round"/>';
+    }
+    if (has(fig,'cape')) {
+      var cc = fig.rarity === 'secret' ? '#ffd86b' : shade(main,-0.15);
+      o += '<path d="M38 68 Q30 118 46 140 Q55 128 64 140 Q80 118 72 68 Z" fill="'+cc+'" opacity="0.95"/>';
+    }
+    if (has(fig,'shawl')) {
+      o += '<path d="M32 66 Q55 84 78 66 L78 78 Q55 96 32 78 Z" fill="'+shade(fig.suit,-0.1)+'"/>';
+    }
+    if (has(fig,'dragonTail') || has(fig,'bearTail') || has(fig,'catTail') || has(fig,'dogTail')) {
+      var tc = has(fig,'dragonTail') ? shade(main,-0.05) : shade(fig.suit,-0.08);
+      o += '<path d="M78 132 Q104 128 100 104 Q96 92 88 100 Q94 114 76 122 Z" fill="'+tc+'"/>';
+    }
+    if (has(fig,'curlyTail')) {
+      o += '<path d="M80 128 q10 -4 6 -12 q-8 -4 -2 -10" stroke="'+shade(main,-0.1)+'" stroke-width="4.5" fill="none" stroke-linecap="round"/>';
+    }
+    if (has(fig,'poofTail')) {
+      o += '<circle cx="86" cy="128" r="8" fill="#fff"/>';
+    }
+    if (has(fig,'auroraRibbons')) {
+      o += '<path d="M20 40 Q40 70 20 110" stroke="#7fd8a4" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.55"/>';
+      o += '<path d="M90 40 Q70 70 90 110" stroke="#c78cf0" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.55"/>';
+    }
+    if (has(fig,'backpackProp')) {
+      o += '<rect x="66" y="70" width="24" height="34" rx="6" fill="'+shade(main,-0.1)+'"/><rect x="72" y="66" width="12" height="10" fill="'+shade(main,-0.2)+'"/>';
+    }
+    return o;
+  }
+
+  function frontExtras(fig, main, light, suitTop){
+    var o = '';
+    if (has(fig,'bowtie')) {
+      o += '<path d="M46 '+(suitTop+4)+' L55 '+(suitTop+9)+' L46 '+(suitTop+14)+' Z" fill="#e0607a"/>';
+      o += '<path d="M64 '+(suitTop+4)+' L55 '+(suitTop+9)+' L64 '+(suitTop+14)+' Z" fill="#e0607a"/>';
+      o += '<circle cx="55" cy="'+(suitTop+9)+'" r="3" fill="#c94a63"/>';
+    }
+    if (has(fig,'apron')) {
+      o += '<path d="M40 '+(suitTop+2)+' L70 '+(suitTop+2)+' L64 138 L46 138 Z" fill="#fff6e6" opacity="0.92"/>';
+      o += '<circle cx="55" cy="'+(suitTop+16)+'" r="3" fill="#e0607a"/>';
+    }
+    if (has(fig,'apronChef')) {
+      o += '<path d="M38 '+(suitTop+2)+' L72 '+(suitTop+2)+' L66 138 L44 138 Z" fill="#fff" opacity="0.95"/>';
+      o += '<rect x="46" y="'+(suitTop+8)+'" width="18" height="10" rx="2" fill="#e0e0e0"/>';
+    }
+    if (has(fig,'overalls')) {
+      o += '<path d="M40 '+(suitTop+2)+' L70 '+(suitTop+2)+' L70 138 L58 138 L58 '+(suitTop+16)+' L52 '+(suitTop+16)+' L52 138 L40 138 Z" fill="#3d6fae" opacity="0.92"/>';
+      o += '<circle cx="44" cy="'+(suitTop+10)+'" r="2.4" fill="#f7d873"/><circle cx="66" cy="'+(suitTop+10)+'" r="2.4" fill="#f7d873"/>';
+    }
+    if (has(fig,'hoodie')) {
+      o += '<path d="M36 '+(suitTop-4)+' Q55 '+(suitTop-14)+' 74 '+(suitTop-4)+' L74 '+(suitTop+6)+' Q55 '+(suitTop-2)+' 36 '+(suitTop+6)+' Z" fill="'+shade(fig.suit,0.12)+'"/>';
+    }
+    if (has(fig,'bib')) {
+      o += '<path d="M44 '+(suitTop+2)+' Q55 '+(suitTop+14)+' 66 '+(suitTop+2)+' L66 '+(suitTop+16)+' Q55 '+(suitTop+26)+' 44 '+(suitTop+16)+' Z" fill="#fff" opacity="0.9"/>';
+    }
+    if (has(fig,'cane')) {
+      o += '<path d="M84 96 L84 138 M84 96 Q90 96 90 90" stroke="#8a5a3a" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+    }
+    if (has(fig,'medal')) {
+      o += '<circle cx="55" cy="'+(suitTop+14)+'" r="8" fill="#fff3c8" stroke="#ffb56b" stroke-width="2"/>';
+      o += '<path d="M50 '+(suitTop+2)+' L55 '+(suitTop+10)+' L60 '+(suitTop+2)+'" stroke="#e0607a" stroke-width="3" fill="none"/>';
+    }
+    if (has(fig,'stethoscope')) {
+      o += '<path d="M42 '+(suitTop+2)+' Q42 '+(suitTop+20)+' 55 '+(suitTop+20)+' Q68 '+(suitTop+20)+' 68 '+(suitTop+2)+'" stroke="#7fc4e8" stroke-width="2.6" fill="none"/>';
+      o += '<circle cx="55" cy="'+(suitTop+24)+'" r="4" fill="#7fc4e8"/>';
+    }
+    if (has(fig,'badge')) {
+      o += '<circle cx="55" cy="'+(suitTop+14)+'" r="9" fill="#e0607a"/><circle cx="55" cy="'+(suitTop+14)+'" r="5" fill="#fff"/>';
+    }
+    if (has(fig,'hose')) {
+      o += '<path d="M78 '+(suitTop+16)+' Q98 '+(suitTop+30)+' 90 '+(suitTop+56)+'" stroke="#f0a24a" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    }
+    if (has(fig,'palette')) {
+      o += '<ellipse cx="86" cy="'+(suitTop+30)+'" rx="10" ry="7" fill="#f6ead2" stroke="#c9a56a" stroke-width="1.4"/>';
+      o += '<circle cx="82" cy="'+(suitTop+28)+'" r="1.6" fill="#e0607a"/><circle cx="88" cy="'+(suitTop+27)+'" r="1.6" fill="#7fc4e8"/><circle cx="90" cy="'+(suitTop+32)+'" r="1.6" fill="#ffd86b"/>';
+    }
+    if (has(fig,'hook')) {
+      o += '<path d="M84 100 L84 116 Q84 124 92 122" stroke="#c9c9d4" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+    }
+    if (has(fig,'wand')) {
+      o += '<path d="M84 92 L96 76" stroke="#5f4785" stroke-width="3.4" stroke-linecap="round"/>';
+      o += '<path d="M96 76 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2 z" fill="#ffd86b"/>';
+    }
+    if (has(fig,'stars')) {
+      o += '<g fill="#ffd86b" opacity="0.9"><circle cx="46" cy="'+(suitTop+20)+'" r="1.8"/><circle cx="64" cy="'+(suitTop+34)+'" r="1.8"/><circle cx="50" cy="'+(suitTop+48)+'" r="1.8"/></g>';
+    }
+    if (has(fig,'star')) {
+      o += '<path d="M55 '+(suitTop+8)+' l3 7 7 1 -5 5 1 7 -6 -4 -6 4 1 -7 -5 -5 7 -1 z" fill="#e0607a"/>';
+    }
+    if (has(fig,'confetti')) {
+      o += '<g><rect x="40" y="'+(suitTop+6)+'" width="4" height="4" fill="#7fd8a4" transform="rotate(20 42 '+(suitTop+8)+')"/>' +
+        '<rect x="66" y="'+(suitTop+14)+'" width="4" height="4" fill="#7fc4e8" transform="rotate(-15 68 '+(suitTop+16)+')"/>' +
+        '<rect x="50" y="'+(suitTop+26)+'" width="4" height="4" fill="#ff93b3" transform="rotate(10 52 '+(suitTop+28)+')"/></g>';
+    }
+    if (has(fig,'bandana')) {
+      o += '<path d="M38 '+(suitTop-2)+' L72 '+(suitTop-2)+' L55 '+(suitTop+8)+' Z" fill="#e0607a"/>';
+    }
+    if (has(fig,'visor')) {
+      o += '<rect x="42" y="'+(fig.pose==='sleep'?0:0)+'" width="26" height="9" rx="3" fill="#3d3d55" transform="translate(0 44)"/>';
+    }
+    if (has(fig,'panels')) {
+      o += '<line x1="42" y1="'+(suitTop+10)+'" x2="42" y2="130" stroke="#7a8199" stroke-width="1.6"/>';
+      o += '<line x1="68" y1="'+(suitTop+10)+'" x2="68" y2="130" stroke="#7a8199" stroke-width="1.6"/>';
+      o += '<circle cx="55" cy="'+(suitTop+20)+'" r="3" fill="#ffd86b"/>';
+    }
+    if (has(fig,'tutu')) {
+      o += '<path d="M30 '+(suitTop+6)+' Q55 '+(suitTop-6)+' 80 '+(suitTop+6)+' Q70 '+(suitTop+22)+' 55 '+(suitTop+18)+' Q40 '+(suitTop+22)+' 30 '+(suitTop+6)+' Z" fill="#fff" opacity="0.85"/>';
+    }
+    if (has(fig,'shellTop')) {
+      o += '<path d="M45 '+(suitTop+2)+' Q50 '+(suitTop-6)+' 55 '+(suitTop+2)+' Q60 '+(suitTop-6)+' 65 '+(suitTop+2)+' Z" fill="#ffb6c9"/>';
+    }
+    if (has(fig,'gem')) {
+      o += '<path d="M50 '+(suitTop+8)+' L60 '+(suitTop+8)+' L55 '+(suitTop+18)+' Z" fill="#7fc4e8"/>';
+    }
+    if (has(fig,'pandaPatches')) {
+      o += '<ellipse cx="46" cy="60" rx="9" ry="10" fill="#2f2f42" transform="rotate(-12 46 60)"/>';
+      o += '<ellipse cx="64" cy="60" rx="9" ry="10" fill="#2f2f42" transform="rotate(12 64 60)"/>';
+    }
+    if (has(fig,'tigerStripes') || has(fig,'tabbyStripes')) {
+      o += '<g stroke="'+shade(main,-0.4)+'" stroke-width="3" stroke-linecap="round" opacity="0.75">' +
+        '<path d="M40 66 L46 74"/><path d="M50 64 L56 72"/><path d="M64 64 L70 72"/><path d="M74 66 L80 74"/></g>';
+    }
+    if (has(fig,'puppySpots')) {
+      o += '<ellipse cx="42" cy="70" rx="7" ry="8" fill="'+shade(main,-0.3)+'"/><ellipse cx="70" cy="94" rx="6" ry="7" fill="'+shade(main,-0.3)+'"/>';
+    }
+    // global series
+    if (has(fig,'scarfStripe')) {
+      o += '<rect x="38" y="'+(suitTop-6)+'" width="34" height="10" fill="#e0607a"/><rect x="38" y="'+(suitTop-6)+'" width="34" height="4" fill="#fff" opacity="0.6"/>';
+    }
+    if (has(fig,'sunGlow')) {
+      o += '<g stroke="#ffd86b" stroke-width="2" stroke-linecap="round"><line x1="86" y1="'+(suitTop+6)+'" x2="94" y2="'+(suitTop+2)+'"/><line x1="86" y1="'+(suitTop+14)+'" x2="96" y2="'+(suitTop+14)+'"/></g>';
+    }
+    if (has(fig,'umbrella')) {
+      o += '<path d="M84 90 L84 130" stroke="#3d3d55" stroke-width="2.6"/><path d="M78 90 Q84 78 90 90 Z" fill="#5aa9e6"/>';
+    }
+    if (has(fig,'torchFlame')) {
+      o += '<path d="M84 70 L84 110" stroke="'+shade(main,-0.2)+'" stroke-width="3.4" stroke-linecap="round"/><path d="M84 62 q-6 6 0 12 q6 -6 0 -12 z" fill="#ffd86b"/>';
+    }
+    if (has(fig,'lanternGlow')) {
+      o += '<ellipse cx="84" cy="100" rx="8" ry="10" fill="#ffd86b" opacity="0.9"/><line x1="84" y1="90" x2="84" y2="80" stroke="#8a5a3a" stroke-width="1.6"/>';
+    }
+    if (has(fig,'waveLines')) {
+      o += '<path d="M30 140 Q40 134 50 140 Q60 134 70 140 Q80 134 90 140" stroke="#7fc4e8" stroke-width="2.4" fill="none" opacity="0.7"/>';
+    }
+    if (has(fig,'bloomPetals')) {
+      o += '<g fill="#e0607a"><circle cx="46" cy="'+(suitTop+14)+'" r="3"/><circle cx="64" cy="'+(suitTop+14)+'" r="3"/><circle cx="55" cy="'+(suitTop+8)+'" r="3"/></g>';
+    }
+    // bakery series
+    if (has(fig,'sprinkles')) {
+      o += '<g><circle cx="44" cy="'+(suitTop+10)+'" r="1.6" fill="#7fc4e8"/><circle cx="66" cy="'+(suitTop+16)+'" r="1.6" fill="#e0607a"/><circle cx="50" cy="'+(suitTop+26)+'" r="1.6" fill="#ffd86b"/><circle cx="60" cy="'+(suitTop+32)+'" r="1.6" fill="#7fd8a4"/></g>';
+    }
+    if (has(fig,'cherryTop')) {
+      o += '<circle cx="55" cy="-2" r="4" fill="#e0607a"/><path d="M55 -6 L57 -12" stroke="#3d6b3d" stroke-width="1.4"/>';
+    }
+    if (has(fig,'crumbs')) {
+      o += '<g fill="#8a5a3a" opacity="0.8"><circle cx="48" cy="'+(suitTop+8)+'" r="1.4"/><circle cx="62" cy="'+(suitTop+10)+'" r="1.4"/></g>';
+    }
+    if (has(fig,'dripGloss')) {
+      o += '<path d="M46 24 q2 8 -2 12" stroke="#e0607a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M64 24 q2 8 -2 12" stroke="#e0607a" stroke-width="3" fill="none" stroke-linecap="round"/>';
+    }
+    if (has(fig,'stripesCandy')) {
+      o += '<g stroke="#e0607a" stroke-width="4" stroke-linecap="round" opacity="0.85"><path d="M36 '+(suitTop+6)+' L50 '+(suitTop+18)+'"/><path d="M46 '+(suitTop+20)+' L60 '+(suitTop+32)+'"/><path d="M56 '+(suitTop+34)+' L70 '+(suitTop+46)+'"/></g>';
+    }
+    if (has(fig,'candleFlame')) {
+      o += '<rect x="52" y="'+(suitTop+2)+'" width="6" height="14" fill="#fff"/><path d="M55 '+(suitTop-4)+' q-3 4 0 8 q3 -4 0 -8 z" fill="#ffd86b"/>';
+    }
+    if (has(fig,'goldCherry')) {
+      o += '<circle cx="55" cy="'+(suitTop+8)+'" r="5" fill="#ffd86b"/><path d="M55 '+(suitTop+2)+' L57 '+(suitTop-4)+'" stroke="#3d6b3d" stroke-width="1.6"/>';
+    }
+    // pop star series
+    if (has(fig,'micProp')) {
+      o += '<path d="M84 74 L84 110" stroke="#2b2b45" stroke-width="2.6"/><ellipse cx="84" cy="68" rx="6" ry="9" fill="#3d3d55"/>';
+    }
+    if (has(fig,'spotlightBeam')) {
+      o += '<path d="M40 0 L20 '+(suitTop+30)+' M70 0 L90 '+(suitTop+30)+'" stroke="#ffd86b" stroke-width="2" opacity="0.4"/>';
+    }
+    if (has(fig,'guitarProp')) {
+      o += '<ellipse cx="88" cy="112" rx="10" ry="14" fill="#8a5a3a"/><rect x="86" y="86" width="4" height="30" fill="#5a3a20"/>';
+    }
+    if (has(fig,'diamondSparkle')) {
+      o += '<path d="M55 '+(suitTop+10)+' l2 5 5 1 -4 3 1 5 -4 -3 -4 3 1 -5 -4 -3 5 -1 z" fill="#eaf3fb"/>';
+    }
+    // school series
+    if (has(fig,'bookProp')) {
+      o += '<rect x="76" y="96" width="18" height="14" rx="1" fill="#e0607a" transform="rotate(-10 85 103)"/><line x1="85" y1="96" x2="85" y2="110" stroke="#fff" stroke-width="1" transform="rotate(-10 85 103)"/>';
+    }
+    if (has(fig,'rulerProp')) {
+      o += '<rect x="78" y="94" width="6" height="30" fill="#f2c94c" transform="rotate(20 81 109)"/>';
+      o += '<g stroke="#3d3d55" stroke-width="0.8"><line x1="78" y1="100" x2="84" y2="100" transform="rotate(20 81 109)"/><line x1="78" y1="108" x2="84" y2="108" transform="rotate(20 81 109)"/></g>';
+    }
+    if (has(fig,'blockProp')) {
+      o += '<rect x="78" y="98" width="14" height="14" rx="2" fill="#e0607a"/><text x="85" y="109" font-size="9" text-anchor="middle" fill="#fff" font-family="sans-serif" font-weight="700">C</text>';
+    }
+    if (has(fig,'flaskProp')) {
+      o += '<path d="M80 96 L80 108 L74 122 L92 122 L86 108 L86 96 Z" fill="#eaf3fb" opacity="0.85" stroke="#7fc4e8" stroke-width="1.2"/><path d="M76 118 L90 118 L92 122 L74 122 Z" fill="#7fd8a4"/>';
+    }
+    if (has(fig,'trumpetProp')) {
+      o += '<path d="M76 100 L92 96 L94 100 L80 106 Z" fill="#f2c94c"/><circle cx="92" cy="98" r="4" fill="#f2c94c"/>';
+    }
+    if (has(fig,'diplomaProp')) {
+      o += '<rect x="78" y="98" width="16" height="6" rx="3" fill="#fff3c8"/><rect x="76" y="98" width="4" height="6" rx="2" fill="#e0607a"/><rect x="92" y="98" width="4" height="6" rx="2" fill="#e0607a"/>';
+    }
+    return o;
+  }
+
+  function figureSVG(fig){
+    var main = fig.suit, skin = fig.skin, dark = shade(main,-0.25);
+    var p = POSE[fig.pose] || POSE.sit;
+    var crouch = p.crouch || 0;
+    var lie = p.lie ? 'rotate(85 55 90) translate(-14 8)' : '';
+
+    var suitTop = fig.fullSuit ? 22 : 78;
+    var cy = 62;
+
+    var sparkle = '';
+    if (fig.rarity === 'secret') {
+      sparkle = '<g opacity="0.95">' +
+        '<path d="M12 30 l3 8 8 3 -8 3 -3 8 -3 -8 -8 -3 8 -3 z" fill="#fff3c8"/>' +
+        '<path d="M100 20 l2.4 6.4 6.4 2.4 -6.4 2.4 -2.4 6.4 -2.4 -6.4 -6.4 -2.4 6.4 -2.4 z" fill="#fff3c8"/>' +
+        '<path d="M98 130 l2 5.4 5.4 2 -5.4 2 -2 5.4 -2 -5.4 -5.4 -2 5.4 -2 z" fill="#fff3c8"/></g>';
+    } else if (fig.rarity === 'rare') {
+      sparkle = '<g opacity="0.8">' +
+        '<path d="M100 24 l2 5.4 5.4 2 -5.4 2 -2 5.4 -2 -5.4 -5.4 -2 5.4 -2 z" fill="#ffd7e6"/>' +
+        '<path d="M12 124 l1.7 4.6 4.6 1.7 -4.6 1.7 -1.7 4.6 -1.7 -4.6 -4.6 -1.7 4.6 -1.7 z" fill="#ffd7e6"/></g>';
+    }
+
+    var a = [];
+    a.push('<svg viewBox="0 0 110 172" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">');
+    a.push('<g transform="'+lie+' translate(0 '+crouch+')">');
+    a.push('<ellipse cx="55" cy="158" rx="28" ry="6" fill="#000" opacity="0.18"/>');
+    a.push(backExtras(fig, main, skin));
+
+    // legs (or mermaid fin)
+    if (has(fig,'fin')) {
+      a.push('<path d="M38 128 Q55 172 30 168 Q46 148 40 128 Z" fill="'+shade(main,-0.1)+'"/>');
+      a.push('<path d="M72 128 Q55 172 80 168 Q64 148 70 128 Z" fill="'+shade(main,-0.1)+'"/>');
+    } else {
+      a.push('<rect x="39" y="122" width="13" height="34" rx="6.5" fill="'+shade(main,-0.05)+'" transform="rotate('+p.legL+' 45 128)"/>');
+      a.push('<rect x="58" y="122" width="13" height="34" rx="6.5" fill="'+shade(main,-0.05)+'" transform="rotate('+p.legR+' 65 128)"/>');
+      a.push('<ellipse cx="45" cy="154" rx="8" ry="5" fill="#3d3d55" transform="rotate('+p.legL+' 45 128)"/>');
+      a.push('<ellipse cx="65" cy="154" rx="8" ry="5" fill="#3d3d55" transform="rotate('+p.legR+' 65 128)"/>');
+    }
+
+    // arms
+    a.push('<rect x="24" y="66" width="13" height="40" rx="6.5" fill="'+shade(main,-0.05)+'" transform="rotate('+p.armL+' 30 72)"/>');
+    a.push('<rect x="73" y="66" width="13" height="40" rx="6.5" fill="'+shade(main,-0.05)+'" transform="rotate('+p.armR+' 80 72)"/>');
+    a.push('<circle cx="30" cy="104" r="7" fill="'+skin+'" transform="rotate('+p.armL+' 30 72)"/>');
+    a.push('<circle cx="80" cy="104" r="7" fill="'+skin+'" transform="rotate('+p.armR+' 80 72)"/>');
+
+    // body pill (skin) + suit overlay
+    a.push('<rect x="30" y="14" width="50" height="128" rx="25" fill="'+skin+'" stroke="'+shade(skin,-0.25)+'" stroke-width="1.3"/>');
+    a.push('<path d="M30 '+suitTop+' L80 '+suitTop+' L80 117 Q80 142 55 142 Q30 142 30 117 Z" fill="'+main+'" stroke="'+dark+'" stroke-width="1.3"/>');
+
+    a.push(frontExtras(fig, main, skin, suitTop));
+    a.push(hatSVG(fig));
+    a.push(faceSVG(fig, 46, 64, cy));
+
+    a.push('</g>');
+    a.push(sparkle);
+    a.push('</svg>');
+    return a.join('');
+  }
+
+  function lockedThumb(){
+    return '<svg viewBox="0 0 110 172" width="100%" height="100%">' +
+      '<rect x="30" y="14" width="50" height="128" rx="25" fill="#2b2c50"/>' +
+      '<text x="55" y="90" text-anchor="middle" font-size="26" font-weight="700" fill="#4a4b78" font-family="sans-serif">?</text>' +
+      '</svg>';
+  }
+
+  // ---------- storage ----------
+  // window.storage only exists inside the Claude.ai artifact environment.
+  // When this file is opened directly (e.g. double-clicked in Chrome), it's
+  // undefined, so we detect that and fall back to localStorage, and finally
+  // to an in-memory store if even that isn't available (e.g. some file://
+  // contexts block it). This keeps loading and reset working everywhere.
+  var storageBackend = 'memory';
+  var memoryStore = {};
+
+  function detectStorageBackend(){
+    try {
+      if (typeof window !== 'undefined' && window.storage &&
+          typeof window.storage.get === 'function' && typeof window.storage.set === 'function') {
+        return 'claude';
+      }
+    } catch (e) {}
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('__wd_probe__', '1');
+        localStorage.removeItem('__wd_probe__');
+        return 'local';
+      }
+    } catch (e) {}
+    return 'memory';
+  }
+
+  function cleanInventory(raw){
+    var clean = {};
+    for (var k in raw) {
+      if (FIG_BY_ID[k] && raw[k] > 0) clean[k] = raw[k];
+    }
+    return clean;
+  }
+
+  function loadInventory(){
+    storageBackend = detectStorageBackend();
+    if (storageBackend === 'claude') {
+      return window.storage.get(storageKey, false).then(function(res){
+        var raw = (res && res.value) ? JSON.parse(res.value) : {};
+        inventory = cleanInventory(raw);
+      }).catch(function(){ inventory = {}; });
+    }
+    if (storageBackend === 'local') {
+      try {
+        var raw = JSON.parse(localStorage.getItem(storageKey) || '{}');
+        inventory = cleanInventory(raw);
+      } catch (e) { inventory = {}; }
+      return Promise.resolve();
+    }
+    inventory = memoryStore;
+    return Promise.resolve();
+  }
+
+  function saveInventory(){
+    try {
+      if (storageBackend === 'claude') {
+        return window.storage.set(storageKey, JSON.stringify(inventory), false).catch(function(){});
+      }
+      if (storageBackend === 'local') {
+        localStorage.setItem(storageKey, JSON.stringify(inventory));
+        return Promise.resolve();
+      }
+      memoryStore = inventory;
+      return Promise.resolve();
+    } catch (e) {
+      return Promise.resolve();
+    }
+  }
+
+  // ---------- helpers ----------
+  function ownedCount(id){ return inventory[id] || 0; }
+  function seriesOwnedTotal(s){ return s.figures.filter(function(f){ return ownedCount(f.id) > 0; }).length; }
+  function totalUnique(){ var n=0; for (var k in inventory) { if (inventory[k]>0) n++; } return n; }
+  function totalOpened(){ var n=0; for (var k in inventory) { n += inventory[k]; } return n; }
+  function setsCompleted(){ return SERIES.filter(function(s){ return seriesOwnedTotal(s)===s.figures.length; }).length; }
+  function ownedOfRarity(r){
+    var n = 0;
+    for (var k in inventory) { if (inventory[k] > 0 && FIG_BY_ID[k] && FIG_BY_ID[k].rarity === r) n++; }
+    return n;
+  }
+  function countOfRarity(r){
+    var n = 0;
+    SERIES.forEach(function(s){ s.figures.forEach(function(f){ if (f.rarity === r) n++; }); });
+    return n;
+  }
+
+  // commons 78% / rares 17% / secret 5%
+  function pickFigure(seriesId){
+    var s = SERIES.filter(function(x){ return x.id === seriesId; })[0];
+    var commons = s.figures.filter(function(f){ return f.rarity === 'common'; });
+    var rares   = s.figures.filter(function(f){ return f.rarity === 'rare'; });
+    var secrets = s.figures.filter(function(f){ return f.rarity === 'secret'; });
+    var r = Math.random() * 100;
+    var pool, span, base;
+    if (r < 78)      { pool = commons; base = 0;  span = 78; }
+    else if (r < 95) { pool = rares;   base = 78; span = 17; }
+    else             { pool = secrets; base = 95; span = 5; }
+    var idx = Math.min(pool.length - 1, Math.floor(((r - base) / span) * pool.length));
+    return FIG_BY_ID[pool[idx].id];
+  }
+
+  // ---------- render ----------
+  function seriesChipsHTML(){
+    var out = '<div class="wd-series-row">';
+    SERIES.forEach(function(sr){
+      out += '<div class="wd-series-chip ' + (sr.id===activeSeries?'active':'') + '" style="--sc:'+sr.color+'" data-series="'+sr.id+'">' +
+        '<span class="dot" style="background:'+sr.color+'"></span>' + esc(sr.name) + '</div>';
+    });
+    return out + '</div>';
+  }
+
+  function renderOpen(){
+    var s = SERIES.filter(function(x){ return x.id===activeSeries; })[0];
+    var html = seriesChipsHTML();
+    html += '<div class="wd-panel-title">' + esc(s.name) + ' <small>tap a box to open it</small></div>';
+    html += '<div class="wd-shelf" style="--sc:'+s.color+'">';
+    for (var i=0;i<6;i++){
+      html += '<div class="wd-box" style="--sc:'+s.color+'"><div class="wd-box-ribbon"></div><div class="wd-box-mark">?</div></div>';
+    }
+    html += '</div>';
+    html += '<div class="wd-hint">5 regular Weirdos, 2 rares and 1 golden secret hide in every series.<br>Rares turn up about 1 box in 6, secrets about 1 in 20.</div>';
+    return html;
+  }
+
+  function slotHTML(f, s){
+    var c = ownedCount(f.id);
+    var locked = c === 0;
+    var pip = (f.rarity !== 'common' && !locked) ? '<div class="wd-pip '+f.rarity+'"></div>' : '';
+    return '<div class="wd-slot ' + (locked?'locked':'owned') + ' ' + f.rarity + '" style="--sc:'+s.color+'">' +
+      pip +
+      (c>0 ? '<div class="wd-count">x'+c+'</div>' : '') +
+      '<div class="wd-thumb">' + (locked ? lockedThumb() : figureSVG(FIG_BY_ID[f.id])) + '</div>' +
+      '<div class="wd-slot-name">' + (locked ? '?' : esc(f.name)) + '</div>' +
+      '</div>';
+  }
+
+  function renderCollection(){
+    var s = SERIES.filter(function(x){ return x.id===activeSeries; })[0];
+    var owned = seriesOwnedTotal(s), total = s.figures.length;
+    var complete = owned === total;
+
+    var html = seriesChipsHTML();
+    html += '<div class="wd-progress-wrap" style="--sc:'+s.color+'">' +
+      '<div class="wd-progress-bar"><div class="wd-progress-fill" style="width:'+((owned/total)*100)+'%"></div></div>' +
+      '<div class="wd-progress-label"><span>' + owned + '/' + total + ' collected' +
+      (complete ? '<span class="wd-complete-badge">&#10024; Complete Set!</span>' : '') +
+      '</span><span>' + esc(s.name) + '</span></div></div>';
+
+    html += '<div class="wd-coll-grid">';
+    s.figures.forEach(function(f){ html += slotHTML(f, s); });
+    html += '</div>';
+    return html;
+  }
+
+  function renderStats(){
+    var html = '<div class="wd-stat-cards">' +
+      '<div class="wd-stat-card"><div class="wd-stat-num">'+totalOpened()+'</div><div class="wd-stat-lbl">boxes opened</div></div>' +
+      '<div class="wd-stat-card"><div class="wd-stat-num">'+totalUnique()+'/'+TOTAL_FIGS+'</div><div class="wd-stat-lbl">weirdos found</div></div>' +
+      '<div class="wd-stat-card"><div class="wd-stat-num">'+setsCompleted()+'/'+SERIES.length+'</div><div class="wd-stat-lbl">sets complete</div></div>' +
+      '</div>';
+
+    html += '<div class="wd-panel-title">Series progress</div>';
+    SERIES.forEach(function(s){
+      var owned = seriesOwnedTotal(s), total = s.figures.length;
+      html += '<div class="wd-series-stat-row" style="--sc:'+s.color+'">' +
+        '<span class="dot" style="background:'+s.color+'"></span>' +
+        '<span class="name">'+esc(s.name)+'</span>' +
+        '<div class="wd-progress-bar"><div class="wd-progress-fill" style="width:'+((owned/total)*100)+'%"></div></div>' +
+        '<span class="pct">'+owned+'/'+total+'</span></div>';
+    });
+
+    html += '<div class="wd-shelf-box"><div class="wd-shelf-title">&#10024; Golden secrets</div>' +
+      '<div class="wd-shelf-sub">'+ownedOfRarity('secret')+' of '+countOfRarity('secret')+' found</div>' +
+      '<div class="wd-shelf-grid">';
+    SERIES.forEach(function(s){
+      s.figures.filter(function(f){ return f.rarity==='secret'; }).forEach(function(f){ html += slotHTML(f, s); });
+    });
+    html += '</div></div>';
+
+    html += '<div class="wd-shelf-box"><div class="wd-shelf-title">Rare Weirdos</div>' +
+      '<div class="wd-shelf-sub">'+ownedOfRarity('rare')+' of '+countOfRarity('rare')+' found</div>' +
+      '<div class="wd-shelf-grid">';
+    SERIES.forEach(function(s){
+      s.figures.filter(function(f){ return f.rarity==='rare'; }).forEach(function(f){ html += slotHTML(f, s); });
+    });
+    html += '</div></div>';
+    return html;
+  }
+
+  function render(){
+    var main = document.getElementById('wdMain');
+    if (activeTab === 'open') main.innerHTML = renderOpen();
+    else if (activeTab === 'collection') main.innerHTML = renderCollection();
+    else main.innerHTML = renderStats();
+    bindDynamic();
+  }
+
+  function openBox(boxEl){
+    if (boxEl.classList.contains('shaking') || boxEl.classList.contains('opened')) return;
+    boxEl.classList.add('shaking');
+    setTimeout(function(){
+      boxEl.classList.remove('shaking');
+      boxEl.classList.add('opened');
+      var fig = pickFigure(activeSeries);
+      var was = ownedCount(fig.id);
+      inventory[fig.id] = was + 1;
+      try { saveInventory(); } catch (e) {}
+      showReveal(fig, was > 0, was + 1);
+      setTimeout(function(){
+        boxEl.classList.remove('opened');
+        boxEl.style.transform = '';
+      }, 400);
+    }, 520);
+  }
+
+  function showReveal(fig, isDup, newCount){
+    var bg = document.getElementById('wdModalBg');
+    var modal = document.getElementById('wdModal');
+    var color = fig.rarity === 'secret' ? '#ffd86b' : (fig.rarity === 'rare' ? '#ff93b3' : fig.seriesColor);
+    modal.style.setProperty('--sc', color);
+
+    var tagText = fig.rarity === 'secret' ? '&#10024; Golden Secret'
+                : (fig.rarity === 'rare' ? '&#9733; Rare' : 'Weirdo');
+    var status = isDup ? ('Duplicate - you now have ' + newCount + '!') : 'New Weirdo! \uD83C\uDF89';
+
+    modal.innerHTML =
+      '<div class="wd-burst" style="--sc:'+color+'"><div class="wd-ring"></div><div class="wd-ring"></div><div class="wd-ring"></div></div>' +
+      '<div class="wd-rarity-tag '+fig.rarity+'">'+tagText+'</div>' +
+      '<div class="wd-figure-stage">'+figureSVG(fig)+'</div>' +
+      '<div class="wd-fig-name">'+esc(fig.name)+'</div>' +
+      '<div class="wd-fig-series">'+esc(fig.seriesName)+'</div>' +
+      '<div class="wd-fig-status '+(isDup?'dup':'new')+'">'+status+'</div>' +
+      '<button class="wd-btn" id="wdRevealClose">Nice!</button>';
+
+    bg.classList.add('show');
+    document.getElementById('wdRevealClose').onclick = function(){
+      bg.classList.remove('show');
+      if (activeTab !== 'open') render();
+    };
+  }
+
+  function bindDynamic(){
+    var chips = document.querySelectorAll('.wd-series-chip');
+    for (var i=0;i<chips.length;i++){
+      chips[i].onclick = function(){ activeSeries = this.getAttribute('data-series'); render(); };
+    }
+    var boxes = document.querySelectorAll('.wd-box');
+    for (var j=0;j<boxes.length;j++){
+      boxes[j].onclick = function(){ openBox(this); };
+    }
+  }
+
+  document.getElementById('wdNav').addEventListener('click', function(e){
+    var btn = e.target.closest('button[data-tab]');
+    if (!btn) return;
+    activeTab = btn.getAttribute('data-tab');
+    var nb = document.querySelectorAll('#wdNav button');
+    for (var i=0;i<nb.length;i++){ nb[i].classList.toggle('active', nb[i]===btn); }
+    render();
+  });
+
+  document.getElementById('wdReset').addEventListener('click', function(){
+    if (!confirm('Reset your whole collection? This cannot be undone.')) return;
+    inventory = {};
+    try { saveInventory(); } catch (e) {}
+    render();
+  });
+
+  var starsWrap = document.getElementById('wdStars');
+  for (var si=0; si<45; si++){
+    var st = document.createElement('div');
+    st.className = 'wd-star';
+    st.style.left = (Math.random()*100)+'%';
+    st.style.top = (Math.random()*100)+'%';
+    st.style.animationDelay = (Math.random()*3)+'s';
+    var sz = (Math.random()>0.85 ? '3px' : '1.5px');
+    st.style.width = sz; st.style.height = sz;
+    starsWrap.appendChild(st);
+  }
+
+  loadInventory().then(function(){
+    document.getElementById('wdLoading').style.display = 'none';
+    document.getElementById('wdMain').style.display = 'block';
+    render();
+  });
+})();
+</script>
